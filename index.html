@@ -692,7 +692,7 @@ function updateStat() {
     el.innerHTML = `<span class="stat-left">${G.length} GAMES \u00b7 5 TEAMS \u00b7 4 VENUES</span>
       <span class="cal-btns">
         <a class="cal-btn" href="webcal://lidge-jun.github.io/college-hockey-2026/cal/all.ics">\ud83d\udcc5 Apple Cal</a>
-        <a class="cal-btn" href="https://calendar.google.com/calendar/r?cid=${encodeURIComponent(BASE_URL + '/cal/all.ics')}" target="_blank">\ud83d\udcc5 Google Cal</a>
+        <a class="cal-btn" href="https://calendar.google.com/calendar/r?cid=${BASE_URL}/cal/all.ics" target="_blank">\ud83d\udcc5 Google Cal</a>
       </span>`;
     return;
   }
@@ -702,7 +702,7 @@ function updateStat() {
   el.innerHTML = `<span class="stat-left"><strong>HOME ${h}</strong> \u00b7 AWAY ${a} \u00b7 ${h+a} GAMES</span>
     <span class="cal-btns">
       <a class="cal-btn" href="webcal://lidge-jun.github.io/college-hockey-2026/cal/${icsFile}.ics">\ud83d\udcc5 Apple Cal</a>
-      <a class="cal-btn" href="https://calendar.google.com/calendar/r?cid=${encodeURIComponent(BASE_URL + '/cal/' + icsFile + '.ics')}" target="_blank">\ud83d\udcc5 Google Cal</a>
+      <a class="cal-btn" href="https://calendar.google.com/calendar/r?cid=${BASE_URL}/cal/${icsFile}.ics" target="_blank">\ud83d\udcc5 Google Cal</a>
     </span>`;
 }
 
