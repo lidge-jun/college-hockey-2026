@@ -689,8 +689,15 @@ function parseTime(d, timeStr) {
   const sd = new Date(d + 'T00:00:00');
   sd.setHours(sh, sm, 0);
   const ed = new Date(d + 'T00:00:00');
-  if (eh < sh) ed.setDate(ed.getDate() + 1);
-  ed.setHours(eh % 24, em, 0);
+  // 24:00 or end < start → next day
+  if (eh >= 24 || eh < sh) ed.setDate(ed.getDate() + 1);
+  const endH = eh % 24;
+  // midnight exact → 00:01 to avoid same-day ambiguity
+  if (endH === 0 && em === 0) {
+    ed.setHours(0, 1, 0);
+  } else {
+    ed.setHours(endH, em, 0);
+  }
   return { start: sd, end: ed };
 }
 
