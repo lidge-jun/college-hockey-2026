@@ -341,7 +341,7 @@
 
     .game-row {
       display: grid;
-      grid-template-columns: 4px 1fr auto;
+      grid-template-columns: 4px 1fr auto auto;
       gap: 14px;
       align-items: center;
       padding: 14px 0;
@@ -400,14 +400,23 @@
     }
     .map-link {
       color: var(--text3);
-      opacity: 0.6;
+      opacity: 0.35;
       transition: opacity 0.15s, color 0.15s;
-      vertical-align: middle;
-      margin-left: 2px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
     .map-link:hover {
       opacity: 1;
       color: #1ec800;
+    }
+    .map-link-big {
+      width: 32px;
+      height: 32px;
+    }
+    .map-link-big svg {
+      width: 24px;
+      height: 24px;
     }
     .g-note {
       font-size: 0.62rem;
@@ -790,9 +799,10 @@ function gameRowHTML(g) {
         <span class="g-ename">${at.en}</span>
       </div>
     </div>
+    <a href="${ve.naver}" target="_blank" class="map-link map-link-big" title="네이버 지도" onclick="event.stopPropagation()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></a>
     <div class="g-meta">
       <div class="g-time">${g.time || ''}</div>
-      <div class="g-venue">${ve.name} <a href="${ve.naver}" target="_blank" class="map-link" title="네이버 지도"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></a></div>
+      <div class="g-venue">${ve.name}</div>
       ${g.note ? `<div class="g-note">${g.note}</div>` : ''}
     </div>
   </div>`;
