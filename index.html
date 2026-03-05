@@ -698,7 +698,8 @@ function updateStat() {
   el.innerHTML = `<span class="stat-left"><strong>HOME ${h}</strong> \u00b7 AWAY ${a} \u00b7 ${h+a} GAMES</span>
     <span class="cal-btns">
       <a class="cal-btn" href="webcal://lidge-jun.github.io/college-hockey-2026/cal/${icsFile}.ics">\ud83d\udcc5 Apple Cal</a>
-      <a class="cal-btn" href="https://calendar.google.com/calendar/r?cid=${BASE_URL}/cal/${icsFile}.ics" target="_blank">\ud83d\udcc5 Google Cal</a>
+      <a class="cal-btn" href="https://calendar.google.com/calendar/r?cid=webcal://lidge-jun.github.io/college-hockey-2026/cal/${icsFile}.ics" target="_blank">\ud83d\udcc5 Google Cal</a>
+      <button class="cal-btn" onclick="navigator.clipboard.writeText('${BASE_URL}/cal/${icsFile}.ics');this.textContent='\u2705 Copied!'">\ud83d\udccb Copy URL</button>
     </span>`;
 }
 
