@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>2026 대학 아이스하키 리그</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #111114;
+      --surface: #18181c;
+      --surface2: #1f1f24;
+      --border: #25252b;
+      --border2: #303038;
+      --text: #e8e8ec;
+      --text2: #7a7a85;
+      --text3: #4a4a55;
+      --header-rule: #fff;
+      --tab-on: #fff;
+      --skku: #3DB06B;
+      --snu: #2A6BBE;
+      --yonsei: #1764E8;
+      --korea: #9B2335;
+      --kwu: #843DA0;
+    }
+    [data-theme="light"] {
+      --bg: #f6f6f8;
+      --surface: #eeeef1;
+      --surface2: #e4e4e8;
+      --border: #d4d4d9;
+      --border2: #c8c8ce;
+      --text: #1a1a1f;
+      --text2: #606068;
+      --text3: #9a9aa2;
+      --header-rule: #1a1a1f;
+      --tab-on: #1a1a1f;
+      --skku: #2d8a52;
+      --snu: #1f5499;
+      --yonsei: #1250bf;
+      --korea: #7e1c2c;
+      --kwu: #6b2f85;
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Barlow', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100dvh;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .wrap {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 0 20px 48px;
+    }
+
+    /* ── Header ── */
+    header {
+      padding: 40px 0 0;
+      margin-bottom: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .header-logo {
+      width: 48px;
+      height: 48px;
+      flex-shrink: 0;
+    }
+    .header-logo svg {
+      width: 100%;
+      height: 100%;
+      color: var(--text);
+    }
+    header h1 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: clamp(2rem, 5vw, 2.8rem);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      line-height: 1;
+    }
+    .h1-year {
+      font-weight: 400;
+      font-size: 0.5em;
+      letter-spacing: 1px;
+      vertical-align: super;
+      color: var(--text2);
+      margin-left: 4px;
+    }
+    .header-sub {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.76rem;
+      color: var(--text3);
+      text-transform: uppercase;
+      letter-spacing: 4px;
+      margin-top: 4px;
+    }
+    .team-gradient {
+      height: 3px;
+      margin-top: 20px;
+      background: linear-gradient(90deg, var(--skku) 0%, var(--skku) 20%, var(--snu) 20%, var(--snu) 40%, var(--yonsei) 40%, var(--yonsei) 60%, var(--korea) 60%, var(--korea) 80%, var(--kwu) 80%, var(--kwu) 100%);
+      opacity: 0.8;
+    }
+
+    .theme-btn {
+      background: none;
+      border: 1px solid var(--border2);
+      color: var(--text2);
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: border-color 0.2s, color 0.2s;
+      flex-shrink: 0;
+    }
+    .theme-btn:hover { border-color: var(--text2); color: var(--text); }
+    .theme-btn svg { width: 18px; height: 18px; fill: currentColor; }
+    .header-sub {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.76rem;
+      color: var(--text3);
+      text-transform: uppercase;
+      letter-spacing: 4px;
+      margin-top: 4px;
+    }
+
+    /* ── Tabs ── */
+    .tabs {
+      display: flex;
+      gap: 0;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .tabs::-webkit-scrollbar { display: none; }
+
+    .tab {
+      padding: 12px 20px;
+      border: none;
+      background: transparent;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.88rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text3);
+      cursor: pointer;
+      white-space: nowrap;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -1px;
+      transition: color 0.15s;
+    }
+    .tab:hover { color: var(--text2); }
+    .tab.on { color: var(--tab-on); border-bottom-color: var(--tab-on); }
+    .tab[data-t="성균관대"].on { color: var(--skku); border-bottom-color: var(--skku); }
+    .tab[data-t="서울대"].on { color: var(--snu); border-bottom-color: var(--snu); }
+    .tab[data-t="연세대"].on { color: var(--yonsei); border-bottom-color: var(--yonsei); }
+    .tab[data-t="고려대"].on { color: var(--korea); border-bottom-color: var(--korea); }
+    .tab[data-t="광운대"].on { color: var(--kwu); border-bottom-color: var(--kwu); }
+
+    .stat {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.76rem;
+      color: var(--text3);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .stat strong { color: var(--text2); }
+
+    /* ── Calendar ── */
+    .months {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .mo {
+      padding: 20px;
+      border-right: 1px solid var(--border);
+    }
+    .mo:last-child { border-right: none; }
+
+    .mo-head {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+    }
+    .mo-year {
+      font-weight: 400;
+      font-size: 0.7rem;
+      color: var(--text3);
+      letter-spacing: 2px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 1px;
+    }
+    .dw {
+      text-align: center;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.58rem;
+      font-weight: 600;
+      color: var(--text3);
+      padding: 0 0 6px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .cell {
+      aspect-ratio: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      cursor: default;
+      transition: background 0.1s;
+      position: relative;
+    }
+    .cell .n {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 500;
+      color: var(--text3);
+    }
+    .cell.game { cursor: pointer; }
+    .cell.game .n { color: var(--text); }
+    .cell.game:hover { background: var(--surface2); }
+    .cell.sel { background: var(--surface2); outline: 1px solid var(--text3); outline-offset: -1px; }
+
+    .cell.today .n {
+      background: var(--text);
+      color: var(--bg);
+      width: 20px; height: 20px;
+      display: flex; align-items: center; justify-content: center;
+      border-radius: 50%;
+      font-size: 0.68rem;
+    }
+
+    .cell .dot {
+      width: 4px; height: 4px;
+      border-radius: 50%;
+      margin-top: 2px;
+    }
+
+    /* Team-specific cell coloring */
+    .cell.t-home { background: var(--tint); }
+    .cell.t-away .n { border-bottom: 1.5px solid var(--tc); padding-bottom: 1px; }
+
+    /* ── Game List ── */
+    .game-list { border-bottom: 1px solid var(--border); }
+
+    .date-head {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--text3);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      padding: 14px 0 6px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .game-row {
+      display: grid;
+      grid-template-columns: 4px 1fr auto;
+      gap: 14px;
+      align-items: center;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--border);
+      cursor: pointer;
+      transition: background 0.1s;
+    }
+    .game-row:hover { background: var(--surface); margin: 0 -12px; padding: 14px 12px; }
+
+    .stripe {
+      width: 4px;
+      align-self: stretch;
+      border-radius: 2px;
+      min-height: 36px;
+    }
+
+    .g-teams { display: flex; flex-direction: column; gap: 3px; }
+    .g-line {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.88rem;
+      font-weight: 500;
+    }
+    .g-label {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.6rem;
+      font-weight: 600;
+      color: var(--text3);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      width: 36px;
+      flex-shrink: 0;
+    }
+    .g-name { font-weight: 600; }
+    .g-ename {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 400;
+      font-size: 0.72rem;
+      color: var(--text3);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-left: 6px;
+    }
+
+    .g-meta { text-align: right; }
+    .g-time {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.92rem;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+    .g-venue {
+      font-size: 0.68rem;
+      color: var(--text3);
+    }
+    .g-note {
+      font-size: 0.62rem;
+      color: var(--kwu);
+      margin-top: 1px;
+    }
+
+    /* ── Detail (date click) ── */
+    .detail {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      display: none;
+    }
+    .detail.show { display: block; }
+    .detail-head {
+      padding: 14px 20px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+    }
+    .detail-date {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1.2rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .detail-dow {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.78rem;
+      color: var(--text3);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .detail-matches { padding: 0 20px; }
+    .detail-matches .game-row { gap: 14px; }
+    .detail-matches .game-row:hover { margin: 0; padding: 14px 0; }
+
+    /* ── Venues ── */
+    .venues {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .vc {
+      padding: 20px;
+      border-right: 1px solid var(--border);
+    }
+    .vc:last-child { border-right: none; }
+    .vc-label {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.6rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--text3);
+      margin-bottom: 6px;
+    }
+    .vc-name {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+    }
+    .vc-info {
+      font-size: 0.7rem;
+      color: var(--text3);
+      line-height: 1.6;
+    }
+    .vc-tags { display: flex; gap: 4px; margin-top: 10px; }
+    .vc-tag {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.58rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      padding: 2px 6px;
+      border-radius: 2px;
+      color: #fff;
+    }
+
+    footer {
+      padding: 16px 0;
+      font-size: 0.68rem;
+      color: var(--text3);
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 768px) {
+      .wrap { padding: 0 14px 40px; }
+      header { padding: 28px 0 16px; }
+      .months { grid-template-columns: 1fr; }
+      .mo { border-right: none; border-bottom: 1px solid var(--border); }
+      .mo:last-child { border-bottom: none; }
+      .venues { grid-template-columns: 1fr 1fr; }
+      .vc:nth-child(2) { border-right: none; }
+      .vc { border-bottom: 1px solid var(--border); }
+      .game-row { grid-template-columns: 4px 1fr auto; }
+      .g-ename { display: none; }
+      .tab { padding: 10px 14px; font-size: 0.82rem; }
+    }
+    @media (max-width: 480px) {
+      .venues { grid-template-columns: 1fr; }
+      .vc { border-right: none; }
+      .tab { padding: 10px 12px; font-size: 0.78rem; }
+    }
+    @media (hover: none) {
+      .cell.game:hover { background: transparent; }
+      .cell.game:active { background: var(--surface2); }
+      .game-row:hover { background: transparent; margin: 0; padding: 14px 0; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="header-left">
+        <div class="header-logo">
+          <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" fill="none">
+            <!-- Hockey stick -->
+            <path d="M14 8 L30 42 L30 50 Q30 54 34 54 L44 54 Q48 54 48 50 L48 46" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+            <!-- Stick blade fill -->
+            <path d="M30 50 Q30 54 34 54 L44 54 Q48 54 48 50 L48 46 L30 46 Z" fill="currentColor" opacity="0.15"/>
+            <!-- Puck -->
+            <ellipse cx="40" cy="34" rx="10" ry="4" fill="currentColor" opacity="0.8"/>
+            <ellipse cx="40" cy="32" rx="10" ry="4" fill="currentColor"/>
+            <rect x="30" y="32" width="20" height="2" fill="currentColor" opacity="0.8"/>
+            <!-- Ice spray -->
+            <path d="M50 38 Q54 36 56 32" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" opacity="0.3"/>
+            <path d="M48 40 Q52 39 55 36" stroke="currentColor" stroke-width="1" stroke-linecap="round" opacity="0.2"/>
+          </svg>
+        </div>
+        <div>
+          <h1>College Hockey<span class="h1-year">2026</span></h1>
+          <div class="header-sub">University Amateur Ice Hockey League</div>
+        </div>
+      </div>
+      <button class="theme-btn" id="themeBtn" aria-label="Toggle theme">
+        <svg id="themeIcon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18Zm0 16.2V4.8a7.2 7.2 0 0 1 0 14.4Z"/>
+        </svg>
+      </button>
+    </header>
+    <div class="team-gradient"></div>
+
+    <nav class="tabs" id="tabs">
+      <button class="tab on" data-t="all">All</button>
+      <button class="tab" data-t="고려대">Tigris</button>
+      <button class="tab" data-t="연세대">Titans</button>
+      <button class="tab" data-t="성균관대">Kingo Leafs</button>
+      <button class="tab" data-t="서울대">Capitals</button>
+      <button class="tab" data-t="광운대">Unicorns</button>
+    </nav>
+
+    <div class="stat" id="stat"></div>
+
+    <div class="months" id="months"></div>
+
+    <div class="detail" id="detail">
+      <div class="detail-head">
+        <span class="detail-date" id="dDate"></span>
+        <span class="detail-dow" id="dDow"></span>
+      </div>
+      <div class="detail-matches" id="dList"></div>
+    </div>
+
+    <div class="game-list" id="gameList"></div>
+
+    <div class="venues">
+      <div class="vc">
+        <div class="vc-label">연세대 · 서울대 홈</div>
+        <div class="vc-name">목동 아이스링크</div>
+        <div class="vc-info">
+          서울 양천구 안양천로 939<br>
+          연세대 수목토 00:30–02:00 / 일 07:30–09:00<br>
+          서울대 금 23:00–01:00<br>
+          02-2649-8454
+        </div>
+        <div class="vc-tags">
+          <span class="vc-tag" style="background:var(--yonsei)">YON</span>
+          <span class="vc-tag" style="background:var(--snu)">SNU</span>
+        </div>
+      </div>
+      <div class="vc">
+        <div class="vc-label">고려대 홈</div>
+        <div class="vc-name">고려대 아이스링크</div>
+        <div class="vc-info">
+          서울 성북구 안암로 145<br>
+          화 22:00–23:30 / 일 22:30–24:00<br>
+          icerink.korea.ac.kr
+        </div>
+        <div class="vc-tags">
+          <span class="vc-tag" style="background:var(--korea)">KOR</span>
+        </div>
+      </div>
+      <div class="vc">
+        <div class="vc-label">광운대 홈</div>
+        <div class="vc-name">광운대 아이스링크</div>
+        <div class="vc-info">
+          서울 노원구 광운로 21<br>
+          화 20:30–22:00 / 토 17:30–19:00<br>
+          02-909-3114
+        </div>
+        <div class="vc-tags">
+          <span class="vc-tag" style="background:var(--kwu)">KWU</span>
+        </div>
+      </div>
+      <div class="vc">
+        <div class="vc-label">성균관대 홈</div>
+        <div class="vc-name">수원 아이스하우스</div>
+        <div class="vc-info">
+          경기 수원시 권선구 효탑로16번길 20<br>
+          일 22:00–23:30<br>
+          031-296-3443
+        </div>
+        <div class="vc-tags">
+          <span class="vc-tag" style="background:var(--skku)">SKKU</span>
+        </div>
+      </div>
+    </div>
+
+    <footer>5월 경기는 대관 확정 시 변경될 수 있음</footer>
+  </div>
+
+<script>
+const T = {
+  '성균관대': { c:'#3DB06B', en:'KINGO LEAFS' },
+  '서울대':   { c:'#2A6BBE', en:'CAPITALS' },
+  '연세대':   { c:'#1764E8', en:'TITANS' },
+  '고려대':   { c:'#9B2335', en:'TIGRIS' },
+  '광운대':   { c:'#843DA0', en:'ICE UNICORNS' },
+};
+
+const V = {
+  mokdong:   { name:'목동 아이스링크', short:'목동' },
+  korea:     { name:'고려대 아이스링크', short:'고대링크' },
+  kwangwoon: { name:'광운대 아이스링크', short:'광운대' },
+  suwon:     { name:'수원 아이스하우스', short:'수원' },
+};
+
+const G = [
+  { d:'2026-03-08', home:'고려대',   away:'성균관대', v:'korea',     time:'22:30–24:00' },
+  { d:'2026-03-08', home:'연세대',   away:'광운대',   v:'mokdong',   time:'07:30–09:00' },
+  { d:'2026-03-13', home:'서울대',   away:'광운대',   v:'mokdong',   time:'23:00–01:00' },
+  { d:'2026-03-13', home:'광운대',   away:'서울대',   v:'kwangwoon', time:'20:30–22:00' },
+  { d:'2026-03-14', home:'연세대',   away:'서울대',   v:'mokdong',   time:'00:30–02:00' },
+  { d:'2026-03-15', home:'성균관대', away:'연세대',   v:'suwon',     time:'22:00–23:30' },
+  { d:'2026-03-15', home:'고려대',   away:'서울대',   v:'korea',     time:'22:30–24:00' },
+  { d:'2026-03-20', home:'서울대',   away:'성균관대', v:'mokdong',   time:'23:00–01:00' },
+  { d:'2026-03-22', home:'고려대',   away:'연세대',   v:'korea',     time:'22:30–24:00' },
+  { d:'2026-03-28', home:'광운대',   away:'연세대',   v:'kwangwoon', time:'17:30–19:00' },
+  { d:'2026-03-29', home:'성균관대', away:'광운대',   v:'suwon',     time:'22:00–23:30' },
+  { d:'2026-04-03', home:'서울대',   away:'연세대',   v:'mokdong',   time:'23:00–01:00' },
+  { d:'2026-04-04', home:'연세대',   away:'성균관대', v:'mokdong',   time:'00:30–02:00', note:'4/11 가능' },
+  { d:'2026-04-04', home:'광운대',   away:'고려대',   v:'kwangwoon', time:'17:30–19:00' },
+  { d:'2026-04-05', home:'성균관대', away:'서울대',   v:'suwon',     time:'22:00–23:30' },
+  { d:'2026-04-05', home:'고려대',   away:'광운대',   v:'korea',     time:'22:30–24:00' },
+  { d:'2026-04-10', home:'서울대',   away:'고려대',   v:'mokdong',   time:'23:00–01:00' },
+  { d:'2026-04-19', home:'성균관대', away:'고려대',   v:'suwon',     time:'22:00–23:30' },
+  { d:'2026-04-25', home:'광운대',   away:'성균관대', v:'kwangwoon', time:'17:30–19:00' },
+  { d:'2026-05-03', home:'연세대',   away:'고려대',   v:'mokdong',   time:'07:30–09:00', note:'대관 예정' },
+];
+
+const MO = [
+  { y:2026, m:3, label:'MAR' },
+  { y:2026, m:4, label:'APR' },
+  { y:2026, m:5, label:'MAY' },
+];
+const DOW = ['일','월','화','수','목','금','토'];
+const DOW_EN = ['SUN','MON','TUE','WED','THU','FRI','SAT'];
+
+let team = 'all', sel = null;
+
+const fmt = (y,m,d) => `${y}-${String(m).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+const gon = ds => G.filter(g => g.d === ds);
+const isToday = ds => { const t=new Date(),x=new Date(ds+'T12:00:00'); return x.getFullYear()===t.getFullYear()&&x.getMonth()===t.getMonth()&&x.getDate()===t.getDate(); };
+function hexRgb(h) { return `${parseInt(h.slice(1,3),16)},${parseInt(h.slice(3,5),16)},${parseInt(h.slice(5,7),16)}`; }
+
+function updateStat() {
+  const el = document.getElementById('stat');
+  if (team === 'all') { el.textContent = `${G.length} GAMES · 5 TEAMS · 4 VENUES`; return; }
+  const h = G.filter(g => g.home === team).length;
+  const a = G.filter(g => g.away === team).length;
+  el.innerHTML = `<strong>HOME ${h}</strong> · AWAY ${a} · ${h+a} GAMES`;
+}
+
+function renderCals() {
+  const wrap = document.getElementById('months');
+  wrap.innerHTML = '';
+  const tc = team !== 'all' ? T[team].c : null;
+
+  MO.forEach(({ y, m, label }) => {
+    const el = document.createElement('div');
+    el.className = 'mo';
+    const first = new Date(y, m-1, 1).getDay();
+    const days = new Date(y, m, 0).getDate();
+
+    let h = `<div class="mo-head">${label} <span class="mo-year">${y}</span></div>`;
+    h += '<div class="grid">';
+    h += DOW.map(d => `<div class="dw">${d}</div>`).join('');
+
+    for (let i = 0; i < first; i++) h += '<div class="cell"></div>';
+    for (let d = 1; d <= days; d++) {
+      const ds = fmt(y, m, d);
+      const games = gon(ds);
+      const hasG = games.length > 0;
+      let cls = 'cell';
+      if (hasG) cls += ' game';
+      if (isToday(ds)) cls += ' today';
+      if (sel === ds) cls += ' sel';
+
+      let style = '';
+      if (tc && hasG) {
+        const rgb = hexRgb(tc);
+        const isHome = games.some(g => g.home === team);
+        const isAway = games.some(g => g.away === team);
+        if (isHome) {
+          cls += ' t-home';
+          style = `--tint:rgba(${rgb},0.18);--tc:${tc}`;
+        } else if (isAway) {
+          cls += ' t-away';
+          style = `--tc:${tc}`;
+        }
+      }
+
+      h += `<div class="${cls}" data-d="${ds}"${style ? ` style="${style}"` : ''}>`;
+      h += `<span class="n">${d}</span>`;
+      if (hasG && !tc) {
+        h += `<div class="dot" style="background:${T[games[0].home].c}"></div>`;
+      }
+      h += '</div>';
+    }
+    h += '</div>';
+    el.innerHTML = h;
+    wrap.appendChild(el);
+  });
+
+  wrap.querySelectorAll('.cell.game').forEach(c => {
+    c.addEventListener('click', () => pickDate(c.dataset.d));
+  });
+}
+
+function gameRowHTML(g) {
+  const ht = T[g.home], at = T[g.away], ve = V[g.v];
+  return `<div class="game-row" data-d="${g.d}">
+    <div class="stripe" style="background:${ht.c}"></div>
+    <div class="g-teams">
+      <div class="g-line">
+        <span class="g-label">HOME</span>
+        <span class="g-name" style="color:${ht.c}">${g.home}</span>
+        <span class="g-ename">${ht.en}</span>
+      </div>
+      <div class="g-line">
+        <span class="g-label">AWAY</span>
+        <span class="g-name">${g.away}</span>
+        <span class="g-ename">${at.en}</span>
+      </div>
+    </div>
+    <div class="g-meta">
+      <div class="g-time">${g.time || ''}</div>
+      <div class="g-venue">${ve.name}</div>
+      ${g.note ? `<div class="g-note">${g.note}</div>` : ''}
+    </div>
+  </div>`;
+}
+
+function pickDate(ds) {
+  sel = sel === ds ? null : ds;
+  renderCals();
+  const panel = document.getElementById('detail');
+  if (!sel) { panel.classList.remove('show'); return; }
+
+  const games = gon(ds);
+  let filtered = team === 'all' ? games : games.filter(g => g.home === team || g.away === team);
+  if (!filtered.length) filtered = games;
+
+  const dt = new Date(ds + 'T12:00:00');
+  document.getElementById('dDate').textContent = `${MO.find(m=>m.m===dt.getMonth()+1)?.label||''} ${dt.getDate()}`;
+  document.getElementById('dDow').textContent = DOW_EN[dt.getDay()];
+  document.getElementById('dList').innerHTML = filtered.map(gameRowHTML).join('');
+
+  panel.classList.add('show');
+  setTimeout(() => panel.scrollIntoView({ behavior:'smooth', block:'nearest' }), 50);
+}
+
+function renderList() {
+  const wrap = document.getElementById('gameList');
+  const now = new Date(); now.setHours(0,0,0,0);
+  let list = [...G].sort((a,b) => a.d.localeCompare(b.d));
+  if (team !== 'all') list = list.filter(g => g.home === team || g.away === team);
+
+  // upcoming only
+  const upcoming = list.filter(g => new Date(g.d+'T12:00:00') >= now);
+  const show = upcoming.length ? upcoming : list.slice(-10);
+
+  let h = '';
+  let lastDate = '';
+  show.forEach(g => {
+    if (g.d !== lastDate) {
+      const dt = new Date(g.d + 'T12:00:00');
+      const mo = MO.find(m => m.m === dt.getMonth()+1);
+      h += `<div class="date-head">${DOW_EN[dt.getDay()]} · ${mo?.label||''} ${dt.getDate()}</div>`;
+      lastDate = g.d;
+    }
+    h += gameRowHTML(g);
+  });
+  wrap.innerHTML = h;
+
+  wrap.querySelectorAll('.game-row').forEach(r => {
+    r.addEventListener('click', () => pickDate(r.dataset.d));
+  });
+}
+
+document.getElementById('tabs').addEventListener('click', e => {
+  const t = e.target.closest('.tab');
+  if (!t) return;
+  document.querySelectorAll('.tab').forEach(x => x.classList.remove('on'));
+  t.classList.add('on');
+  team = t.dataset.t;
+  sel = null;
+  document.getElementById('detail').classList.remove('show');
+  renderCals();
+  updateStat();
+  renderList();
+});
+
+renderCals();
+updateStat();
+renderList();
+
+// ── Theme Toggle ──
+const themeBtn = document.getElementById('themeBtn');
+const sunPath = 'M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8Zm0-4a1 1 0 0 0 1-1V1a1 1 0 0 0-2 0v2a1 1 0 0 0 1 1Zm0 16a1 1 0 0 0-1 1v2a1 1 0 0 0 2 0v-2a1 1 0 0 0-1-1ZM4 12a1 1 0 0 0-1-1H1a1 1 0 0 0 0 2h2a1 1 0 0 0 1-1Zm16 0a1 1 0 0 0 1 1h2a1 1 0 0 0 0-2h-2a1 1 0 0 0-1 1ZM6.34 6.34a1 1 0 0 0 0-1.41L4.93 3.52a1 1 0 0 0-1.41 1.41l1.41 1.41a1 1 0 0 0 1.41 0Zm11.32 11.32a1 1 0 0 0-1.41 1.41l1.41 1.41a1 1 0 0 0 1.41-1.41l-1.41-1.41ZM6.34 17.66a1 1 0 0 0-1.41 0l-1.41 1.41a1 1 0 0 0 1.41 1.41l1.41-1.41a1 1 0 0 0 0-1.41ZM17.66 6.34a1 1 0 0 0 1.41 0l1.41-1.41a1 1 0 0 0-1.41-1.41l-1.41 1.41a1 1 0 0 0 0 1.41Z';
+const moonPath = 'M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18Zm0 16.2V4.8a7.2 7.2 0 0 1 0 14.4Z';
+
+function setTheme(t) {
+  document.documentElement.setAttribute('data-theme', t);
+  localStorage.setItem('theme', t);
+  document.getElementById('themeIcon').innerHTML = `<path d="${t === 'light' ? moonPath : sunPath}"/>`;
+}
+themeBtn.addEventListener('click', () => {
+  setTheme(document.documentElement.getAttribute('data-theme') === 'light' ? 'dark' : 'light');
+});
+const saved = localStorage.getItem('theme') || (matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+setTheme(saved);
+</script>
+</body>
+</html>
