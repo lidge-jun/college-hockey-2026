@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>2026 College  Gallery</title>Hockey 
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700;800&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #0c0c0f; --surface: #141418; --surface2: #1a1a20;
+      --border: #222228; --border2: #2a2a32;
+      --text: #e8e8ec; --text2: #7a7a85; --text3: #4a4a55;
+      --glow: rgba(255,255,255,0.03);
+      --skku: #3DB06B; --snu: #2A6BBE; --yonsei: #1764E8; --korea: #9B2335; --kwu: #843DA0;
+    }
+    [data-theme="light"] {
+      --bg: #f6f6f8; --surface: #eeeef1; --surface2: #e4e4e8;
+      --border: #d4d4d9; --border2: #c8c8ce;
+      --text: #1a1a1f; --text2: #606068; --text3: #9a9aa2;
+      --glow: rgba(0,0,0,0.02);
+      --skku: #2d8a52; --snu: #1f5499; --yonsei: #1250bf; --korea: #7e1c2c; --kwu: #6b2f85;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Barlow', sans-serif; background: var(--bg); color: var(--text); min-height: 100dvh; -webkit-font-smoothing: antialiased; }
+    .wrap { max-width: 960px; margin: 0 auto; }
+
+    header { display: flex; align-items: center; justify-content: space-between; padding: 40px 24px 0; }
+    .header-left { display: flex; align-items: center; gap: 16px; }
+    .header-logo { width: 48px; height: 48px; flex-shrink: 0; }
+    .header-logo svg { width: 100%; height: 100%; color: var(--text); }
+    header h1 { font-family: 'Barlow Condensed', sans-serif; font-size: clamp(2rem, 5vw, 2.8rem); font-weight: 700; text-transform: uppercase; letter-spacing: 3px; line-height: 1; }
+    .h1-year { font-weight: 400; font-size: 0.5em; letter-spacing: 1px; vertical-align: super; color: var(--text2); margin-left: 4px; }
+    .header-sub { font-family: 'Barlow Condensed', sans-serif; font-size: 0.76rem; color: var(--text3); text-transform: uppercase; letter-spacing: 4px; margin-top: 4px; }
+    .team-gradient { height: 3px; margin-top: 20px; background: linear-gradient(90deg, var(--skku) 0%, var(--skku) 20%, var(--snu) 20%, var(--snu) 40%, var(--yonsei) 40%, var(--yonsei) 60%, var(--korea) 60%, var(--korea) 80%, var(--kwu) 80%, var(--kwu) 100%); opacity: 0.8; }
+    .theme-btn { background: none; border: 1px solid var(--border2); color: var(--text2); width: 36px; height: 36px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: border-color 0.2s, color 0.2s; flex-shrink: 0; }
+    .theme-btn:hover { border-color: var(--text2); color: var(--text); }
+    .theme-btn svg { width: 18px; height: 18px; fill: currentColor; }
+
+    .nav { display: flex; gap: 0; background: var(--surface); border-bottom: 1px solid var(--border); }
+    .nav a { padding: 12px 20px; font-family: 'Barlow Condensed', sans-serif; font-size: 0.88rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: var(--text3); text-decoration: none; border-bottom: 2px solid transparent; margin-bottom: -1px; transition: color 0.15s; }
+    .nav a:hover { color: var(--text2); }
+    .nav a.on { color: var(--text); border-bottom-color: var(--text); }
+
+    .tabs { display: flex; padding: 0; border-bottom: 1px solid var(--border); overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    .tabs::-webkit-scrollbar { display: none; }
+    .tab { font-family: 'Barlow Condensed', sans-serif; font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; padding: 12px 20px; background: none; border: none; color: var(--text3); cursor: pointer; white-space: nowrap; border-bottom: 2px solid transparent; transition: all 0.2s; }
+    .tab:hover { color: var(--text2); }
+    .tab.on { color: var(--text); border-bottom-color: var(--text); }
+
+    .jump-bar { position: sticky; top: 0; z-index: 50; background: rgba(12,12,15,0.92); backdrop-filter: blur(12px); padding: 10px 24px; border-bottom: 1px solid var(--border); }
+    [data-theme="light"] .jump-bar { background: rgba(246,246,248,0.92); }
+    .jump-bar select { width: 100%; padding: 10px 14px; border-radius: 8px; background: var(--surface2); color: var(--text); border: 1px solid var(--border2); font-family: 'Barlow', sans-serif; font-size: 0.82rem; cursor: pointer; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%237a7a85' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; }
+
+    .game-block { border-bottom: 1px solid var(--border); padding: 20px 24px 16px; margin-bottom: 8px; position: relative; transition: background 0.3s; }
+    .game-block:hover { background: var(--glow); }
+    .dual-stripe { position: absolute; left: 0; top: 0; bottom: 0; width: 4px; display: flex; flex-direction: column; }
+    .dual-stripe .s-home { flex: 1; }
+    .dual-stripe .s-away { flex: 1; }
+    .gb-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 12px; }
+    .gb-date { font-family: 'Barlow Condensed', sans-serif; font-size: 0.6rem; font-weight: 600; text-transform: uppercase; letter-spacing: 2.5px; color: var(--text3); margin-bottom: 4px; }
+    .gb-matchup { font-family: 'Barlow Condensed', sans-serif; font-size: 1.1rem; font-weight: 700; display: flex; align-items: center; gap: 8px; letter-spacing: 0.5px; }
+    .gb-vs { font-size: 0.6rem; font-weight: 400; color: var(--text3); letter-spacing: 2px; }
+    .gb-right { display: flex; align-items: center; gap: 10px; }
+    .gb-badge { font-family: 'Barlow Condensed', sans-serif; font-size: 0.6rem; color: var(--text3); display: flex; align-items: center; gap: 4px; background: var(--surface2); padding: 3px 8px; border-radius: 4px; }
+    .gb-badge svg { width: 11px; height: 11px; }
+    .gb-more { width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; background: var(--surface2); color: var(--text3); border: 1px solid var(--border2); border-radius: 6px; cursor: pointer; text-decoration: none; transition: all 0.2s; }
+    .gb-more:hover { color: var(--text); border-color: var(--text3); }
+    .gb-more svg { width: 14px; height: 14px; }
+
+    .photo-strip { display: flex; gap: 6px; overflow-x: auto; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+    .photo-strip::-webkit-scrollbar { display: none; }
+    .photo-strip-item { flex: 0 0 200px; height: 134px; scroll-snap-align: start; border-radius: 6px; overflow: hidden; background: var(--surface2); cursor: pointer; position: relative; }
+    .photo-strip-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease; }
+    .photo-strip-item:hover img { transform: scale(1.06); }
+    .photo-strip-item::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 40px; background: linear-gradient(transparent, rgba(0,0,0,0.3)); pointer-events: none; }
+    .photo-strip-more { flex: 0 0 80px; height: 134px; scroll-snap-align: start; border-radius: 6px; background: var(--surface2); border: 1px solid var(--border2); display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; text-decoration: none; color: var(--text3); transition: all 0.25s; }
+    .photo-strip-more:hover { border-color: var(--text3); color: var(--text2); background: var(--surface); }
+    .photo-strip-more svg { width: 20px; height: 20px; margin-bottom: 4px; }
+    .photo-strip-more span { font-family: 'Barlow Condensed', sans-serif; font-size: 0.58rem; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 600; }
+
+    .photo-strip-empty { width: 100%; height: 80px; border-radius: 6px; border: 1px dashed var(--border2); display: flex; align-items: center; justify-content: center; gap: 8px; color: var(--text3); font-size: 0.72rem; }
+
+    .loading-msg { text-align: center; padding: 60px 20px; font-family: 'Barlow Condensed', sans-serif; font-size: 0.88rem; color: var(--text3); text-transform: uppercase; letter-spacing: 2px; }
+
+    footer { text-align: center; padding: 32px 20px; font-size: 0.68rem; color: var(--text3); }
+
+    @media (max-width: 768px) {
+      header { padding: 28px 14px 0; }
+      .game-block { padding: 16px 14px 12px; }
+      .photo-strip-item { flex: 0 0 160px; height: 108px; }
+      .photo-strip-more { flex: 0 0 64px; height: 108px; }
+      .gb-matchup { font-size: 0.95rem; }
+      .jump-bar { padding: 8px 14px; }
+      .nav a { padding: 10px 14px; font-size: 0.82rem; }
+      .tab { padding: 10px 14px; font-size: 0.8rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="header-left">
+        <div class="header-logo">
+          <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" fill="none">
+            <path d="M14 8 L30 42 L30 50 Q30 54 34 54 L44 54 Q48 54 48 50 L48 46" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M30 50 Q30 54 34 54 L44 54 Q48 54 48 50 L48 46 L30 46 Z" fill="currentColor" opacity="0.15"/>
+            <ellipse cx="40" cy="34" rx="10" ry="4" fill="currentColor" opacity="0.8"/>
+            <ellipse cx="40" cy="32" rx="10" ry="4" fill="currentColor"/>
+            <rect x="30" y="32" width="20" height="2" fill="currentColor" opacity="0.8"/>
+          </svg>
+        </div>
+        <div>
+          <h1>Gallery<span class="h1-year">2026</span></h1>
+          <div class="header-sub">University Amateur Ice Hockey League</div>
+        </div>
+      </div>
+      <button class="theme-btn" id="themeBtn" aria-label="Toggle theme">
+        <svg id="themeIcon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18Zm0 16.2V4.8a7.2 7.2 0 0 1 0 14.4Z"/></svg>
+      </button>
+    </header>
+    <div class="team-gradient"></div>
+
+    <nav class="nav">
+      <a href="index.html">Schedule</a>
+      <a href="standings.html">Standings</a>
+      <a href="gallery.html" class="on">Gallery</a>
+    </nav>
+
+    <nav class="tabs" id="tabs">
+      <button class="tab on" data-t="all">All</button>
+      <button class="tab" data-t="korea">Tigris</button>
+      <button class="tab" data-t="yonsei">Titans</button>
+      <button class="tab" data-t="skku">Kingo Leafs</button>
+      <button class="tab" data-t="snu">Capitals</button>
+      <button class="tab" data-t="kwu">Unicorns</button>
+    </nav>
+
+    <div class="jump-bar">
+      <select id="jumpSelect"><</option></select>option                                                                                  value="">
+    </div>
+
+    <div id="blockList"><div class="loading-msg">Loading gallery...</div></div>
+
+    <footer> : 2026.03.                                                                                       </footer>
+  </div>
+
+<script>
+const T = {
+  '': { c:'#3DB06B', en:'KINGO LEAFS', abbr:'skku' },
+  '':   { c:'#2A6BBE', en:'CAPITALS',    abbr:'snu' },
+  '':   { c:'#1764E8', en:'TITANS',      abbr:'yonsei' },
+  '':   { c:'#9B2335', en:'TIGRIS',      abbr:'korea' },
+  '':   { c:'#843DA0', en:'ICE UNICORNS',abbr:'kwu' },
+};
+const ABBR = {}; for (const [n,t] of Object.entries(T)) ABBR[t.abbr] = n;
+const DOW = ['SUN','MON','TUE','WED','THU','FRI','SAT'];
+
+let activeTeam = 'all';
+let photoConfig = null;
+let gameList = [];
+let photoCache = {};
+
+function normalizePhotos(games) {
+  const r = {};
+  for (const [id, val] of Object.entries(games)) {
+    if (Array.isArray(val)) r[id] = val;
+    else if (typeof val === 'string' && val) r[id] = [{ folderId: val, label: '' }];
+    else r[id] = [];
+  }
+  return r;
+}
+
+async function fetchDriveFiles(folderId, apiKey) {
+  if (!folderId || !apiKey) return [];
+  const cacheKey = folderId;
+  if (photoCache[cacheKey]) return photoCache[cacheKey];
+  let all = [];
+  let pageToken = '';
+  try {
+    do {
+      const q = encodeURIComponent(`'${folderId}' in parents and trashed=false and mimeType contains 'image/'`);
+      let url = `https://www.googleapis.com/drive/v3/files?q=${q}&fields=files(id,name,mimeType),nextPageToken&pageSize=100&key=${apiKey}`;
+      if (pageToken) url += `&pageToken=${pageToken}`;
+      const res = await fetch(url);
+      if (!res.ok) break;
+      const data = await res.json();
+      if (data.files) all = all.concat(data.files);
+      pageToken = data.nextPageToken || '';
+    } while (pageToken);
+  } catch (e) { /* network  return empty */ }error 
+  photoCache[cacheKey] = all;
+  return all;
+}
+
+function thumbUrl(fileId) { return `https://drive.google.com/thumbnail?id=${fileId}&sz=w400`; }
+
+async function init() {
+  const [photosRes, resultsRes] = await Promise.all([
+    fetch('photos.json').then(r => r.json()).catch(() => ({ apiKey: '', games: {} })),
+    fetch('results.json').then(r => r.json()).catch(() => ({ games: [] }))
+  ]);
+
+  photoConfig = { apiKey: photosRes.apiKey, games: normalizePhotos(photosRes.games) };
+
+  // Build game list from results.json
+  gameList = resultsRes.games.map(g => {
+    const parts = g.id.split('-');
+    const homeAbbr = parts[1], awayAbbr = parts[2];
+    const homeName = g.home, awayName = g.away;
+    const dt = new Date(g.date + 'T12:00:00');
+    const folders = photoConfig.games[g.id] || [];
+    return { id: g.id, date: g.date, dt, home: homeName, away: awayName, homeAbbr, awayAbbr, venue: g.venue, folders, score: g.status === 'final' ? g.score : null, overtime: g.overtime };
+  });
+
+  gameList.sort((a, b) => a.date.localeCompare(b.date));
+  populateDropdown();
+  await renderBlocks();
+}
+
+function populateDropdown() {
+  const sel = document.getElementById('jumpSelect');
+  gameList.forEach(g => {
+    if (!g.folders.length) return;
+    const dt = g.dt;
+    const label = `${dt.getMonth()+1}/${dt.getDate()} ${DOW[dt.getDay()]} ${g.home} vs ${g.away}`;
+    const opt = document.createElement('option');
+    opt.value = g.id;
+    opt.textContent = label;
+    sel.appendChild(opt);
+  });
+  sel.addEventListener('change', () => {
+    if (!sel.value) return;
+    const el = document.getElementById('blk-' + sel.value);
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+}
+
+async function renderBlocks() {
+  const wrap = document.getElementById('blockList');
+  const filtered = activeTeam === 'all'
+    ? gameList
+    : gameList.filter(g => T[g.home]?.abbr === activeTeam || T[g.away]?.abbr === activeTeam);
+
+  const withPhotos = filtered.filter(g => g.folders.length > 0);
+
+  if (!withPhotos.length) {
+    wrap.innerHTML = '<div class="loading-msg">No photos yet — season starts Mar 8</div>';
+    return;
+  }
+
+  let html = '';
+  for (const g of withPhotos) {
+    const ht = T[g.home], at = T[g.away];
+    const dt = g.dt;
+    const dateStr = `${dt.getMonth()+1}/${dt.getDate()} ${DOW[dt.getDay()]}`;
+
+    // Fetch photos from all folders
+    let allPhotos = [];
+    for (const folder of g.folders) {
+      const files = await fetchDriveFiles(folder.folderId, photoConfig.apiKey);
+      allPhotos = allPhotos.concat(files);
+    }
+
+    // Shuffle and take max 10
+    const shuffled = allPhotos.sort(() => Math.random() - 0.5).slice(0, 10);
+    const totalCount = allPhotos.length;
+
+    const stripHTML = shuffled.length
+      ? shuffled.map(f => `<div class="photo-strip-item"><img src="${thumbUrl(f.id)}" alt="${f.name}" loading="lazy"></div>`).join('')
+        + `<a class="photo-strip-more" href="gallery-detail.html?game=${g.id}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg><span>View All</span></a>`
+      : `<div class="photo-strip-empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>Loading...</div>`;
+
+    html += `<div class="game-block" id="blk-${g.id}">
+      <div class="dual-stripe"><div class="s-home" style="background:${ht?.c||'#555'}"></div><div class="s-away" style="background:${at?.c||'#555'}"></div></div>
+      <div class="gb-header">
+        <div>
+          <div class="gb-date">${dateStr} · ${g.venue}</div>
+          <div class="gb-matchup">
+            <span style="color:${ht?.c||'#fff'}">${g.home}</span>
+            <span class="gb-vs">VS</span>
+            <span style="color:${at?.c||'#fff'}">${g.away}</span>
+          </div>
+        </div>
+        <div class="gb-right">
+          ${totalCount ? `<div class="gb-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>${totalCount}</div>` : ''}
+          <a class="gb-more" href="gallery-detail.html?game=${g.id}" title="View all"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></a>
+        </div>
+      </div>
+      <div class="photo-strip">${stripHTML}</div>
+    </div>`;
+  }
+  wrap.innerHTML = html;
+}
+
+// Tab switching
+document.getElementById('tabs').addEventListener('click', e => {
+  const btn = e.target.closest('.tab');
+  if (!btn) return;
+  document.querySelectorAll('.tab').forEach(x => x.classList.remove('on'));
+  btn.classList.add('on');
+  activeTeam = btn.dataset.t;
+  renderBlocks();
+});
+
+// Theme
+const themeBtn = document.getElementById('themeBtn');
+const sunPath = 'M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8Zm0-4a1 1 0 0 0 1-1V1a1 1 0 0 0-2 0v2a1 1 0 0 0 1 1Zm0 16a1 1 0 0 0-1 1v2a1 1 0 0 0 2 0v-2a1 1 0 0 0-1-1ZM4 12a1 1 0 0 0-1-1H1a1 1 0 0 0 0 2h2a1 1 0 0 0 1-1Zm16 0a1 1 0 0 0 1 1h2a1 1 0 0 0 0-2h-2a1 1 0 0 0-1 1ZM6.34 6.34a1 1 0 0 0 0-1.41L4.93 3.52a1 1 0 0 0-1.41 1.41l1.41 1.41a1 1 0 0 0 1.41 0Zm11.32 11.32a1 1 0 0 0-1.41 1.41l1.41 1.41a1 1 0 0 0 1.41-1.41l-1.41-1.41ZM6.34 17.66a1 1 0 0 0-1.41 0l-1.41 1.41a1 1 0 0 0 1.41 1.41l1.41-1.41a1 1 0 0 0 0-1.41ZM17.66 6.34a1 1 0 0 0 1.41 0l1.41-1.41a1 1 0 0 0-1.41-1.41l-1.41 1.41a1 1 0 0 0 0 1.41Z';
+const moonPath = 'M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18Zm0 16.2V4.8a7.2 7.2 0 0 1 0 14.4Z';
+function setTheme(t) {
+  document.documentElement.setAttribute('data-theme', t);
+  localStorage.setItem('theme', t);
+  document.getElementById('themeIcon').innerHTML = `<path d="${t === 'light' ? moonPath : sunPath}"/>`;
+}
+themeBtn.addEventListener('click', () => setTheme(document.documentElement.getAttribute('data-theme') === 'light' ? 'dark' : 'light'));
+const saved = localStorage.getItem('theme') || (matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+setTheme(saved);
+
+init();
+</script>
+</body>
+</html>

@@ -350,35 +350,66 @@
   </div>
 
 <script>
-const TEAMS = [
-  { name:'고려대',   en:'TIGRIS',        c:'#9B2335', gp:0, w:0, l:0, otl:0, gf:0, ga:0 },
-  { name:'연세대',   en:'TITANS',        c:'#1764E8', gp:0, w:0, l:0, otl:0, gf:0, ga:0 },
-  { name:'성균관대', en:'KINGO LEAFS',   c:'#3DB06B', gp:0, w:0, l:0, otl:0, gf:0, ga:0 },
-  { name:'서울대',   en:'CAPITALS',      c:'#2A6BBE', gp:0, w:0, l:0, otl:0, gf:0, ga:0 },
-  { name:'광운대',   en:'ICE UNICORNS',  c:'#843DA0', gp:0, w:0, l:0, otl:0, gf:0, ga:0 },
-];
+const TEAM_META = {
+  '고려대':   { en:'TIGRIS',        c:'#9B2335' },
+  '연세대':   { en:'TITANS',        c:'#1764E8' },
+  '성균관대': { en:'KINGO LEAFS',   c:'#3DB06B' },
+  '서울대':   { en:'CAPITALS',      c:'#2A6BBE' },
+  '광운대':   { en:'ICE UNICORNS',  c:'#843DA0' },
+};
 
-// Points: W=3, OTL=1, L=0
-function pts(t) { return t.w * 3 + t.otl * 1; }
+function teamColor(name) { return TEAM_META[name]?.c || '#555'; }
+function pts(t) { return t.w * 3 + t.otl; }
 
-const POINTS = [
-  // { name:'선수명', num:'#00', team:'고려대', gp:0, g:0, a:0 },
-];
-
-const GOALS = [
-  // { name:'선수명', num:'#00', team:'고려대', gp:0, g:0 },
-];
-
-const ASSISTS = [
-  // { name:'선수명', num:'#00', team:'고려대', gp:0, a:0 },
-];
-
-function teamColor(name) {
-  return TEAMS.find(t => t.name === name)?.c || '#555';
+function aggregateResults(games) {
+  const finals = games.filter(g => g.status === 'final');
+  // Team standings
+  const teams = {};
+  for (const name of Object.keys(TEAM_META)) {
+    const m = TEAM_META[name];
+    teams[name] = { name, en: m.en, c: m.c, gp:0, w:0, l:0, otl:0, gf:0, ga:0 };
+  }
+  for (const g of finals) {
+    if (!g.score) continue;
+    const h = teams[g.home], a = teams[g.away];
+    if (!h || !a) continue;
+    h.gp++; a.gp++;
+    h.gf += g.score.home; h.ga += g.score.away;
+    a.gf += g.score.away; a.ga += g.score.home;
+    if (g.score.home > g.score.away) {
+      h.w++;
+      if (g.overtime) { a.otl++; } else { a.l++; }
+    } else {
+      a.w++;
+      if (g.overtime) { h.otl++; } else { h.l++; }
+    }
+  }
+  // Player stats — aggregate across all games
+  const playerMap = {}; // key: "name|num|team"
+  for (const g of finals) {
+    if (!g.players) continue;
+    const addStat = (list, stat) => {
+      if (!list) return;
+      for (const p of list) {
+        const key = `${p.name}|${p.num}|${p.team}`;
+        if (!playerMap[key]) playerMap[key] = { name:p.name, num:p.num, team:p.team, gp:0, g:0, a:0, _games:new Set() };
+        playerMap[key][stat] += p.count;
+        if (!playerMap[key]._games.has(g.id)) {
+          playerMap[key]._games.add(g.id);
+          playerMap[key].gp++;
+        }
+      }
+    };
+    addStat(g.players.goals, 'g');
+    addStat(g.players.assists, 'a');
+  }
+  const players = Object.values(playerMap);
+  players.forEach(p => delete p._games);
+  return { teams: Object.values(teams), players };
 }
 
-function renderTeam() {
-  const sorted = [...TEAMS].sort((a,b) => pts(b) - pts(a) || (b.gf-b.ga) - (a.gf-a.ga) || b.gf - a.gf);
+function renderTeam(teamList) {
+  const sorted = [...teamList].sort((a,b) => pts(b) - pts(a) || (b.gf-b.ga) - (a.gf-a.ga) || b.gf - a.gf);
   const el = document.getElementById('tTeam');
   let rank = 1;
   el.innerHTML = sorted.map((t, i) => {
@@ -398,13 +429,13 @@ function renderTeam() {
   }).join('');
 }
 
-function renderPoints() {
+function renderPoints(players) {
   const el = document.getElementById('tPoints');
-  if (!POINTS.length) {
+  if (!players.length) {
     el.innerHTML = `<tr><td colspan="7"><div class="empty-msg">No stats yet — season starts Mar 8</div></td></tr>`;
     return;
   }
-  const sorted = [...POINTS].sort((a,b) => (b.g+b.a) - (a.g+a.a) || b.g - a.g);
+  const sorted = [...players].sort((a,b) => (b.g+b.a) - (a.g+a.a) || b.g - a.g);
   el.innerHTML = sorted.map((p, i) => `<tr>
     <td class="p-rank">${i+1}</td>
     <td><div class="p-player"><span class="p-num">${p.num}</span><span class="p-name">${p.name}</span></div></td>
@@ -414,13 +445,15 @@ function renderPoints() {
   </tr>`).join('');
 }
 
-function renderPlayers(data, elId, statKey) {
+function renderPlayers(players, elId, statKey) {
   const el = document.getElementById(elId);
-  if (!data.length) {
-    el.innerHTML = `<tr><td colspan="5"><div class="empty-msg">No stats yet — season starts Mar 8</div></td></tr>`;
+  const filtered = players.filter(p => p[statKey] > 0);
+  if (!filtered.length) {
+    const cols = statKey === 'g' ? 5 : 5;
+    el.innerHTML = `<tr><td colspan="${cols}"><div class="empty-msg">No stats yet — season starts Mar 8</div></td></tr>`;
     return;
   }
-  const sorted = [...data].sort((a,b) => b[statKey] - a[statKey]);
+  const sorted = [...filtered].sort((a,b) => b[statKey] - a[statKey]);
   el.innerHTML = sorted.map((p, i) => `<tr>
     <td class="p-rank">${i+1}</td>
     <td><div class="p-player"><span class="p-num">${p.num}</span><span class="p-name">${p.name}</span></div></td>
@@ -440,10 +473,27 @@ document.getElementById('secTabs').addEventListener('click', e => {
   document.getElementById('p' + btn.dataset.p.charAt(0).toUpperCase() + btn.dataset.p.slice(1)).classList.add('show');
 });
 
-renderTeam();
-renderPoints();
-renderPlayers(GOALS, 'tGoals', 'g');
-renderPlayers(ASSISTS, 'tAssists', 'a');
+// Load results and render
+async function init() {
+  try {
+    const res = await fetch('results.json');
+    const data = await res.json();
+    const { teams, players } = aggregateResults(data.games);
+    renderTeam(teams);
+    renderPoints(players);
+    renderPlayers(players, 'tGoals', 'g');
+    renderPlayers(players, 'tAssists', 'a');
+  } catch (e) {
+    // Fallback: render empty standings
+    const teams = Object.entries(TEAM_META).map(([name, m]) =>
+      ({ name, en:m.en, c:m.c, gp:0, w:0, l:0, otl:0, gf:0, ga:0 }));
+    renderTeam(teams);
+    renderPoints([]);
+    renderPlayers([], 'tGoals', 'g');
+    renderPlayers([], 'tAssists', 'a');
+  }
+}
+init();
 
 // Theme
 const themeBtn = document.getElementById('themeBtn');
