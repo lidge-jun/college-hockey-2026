@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>2026 College Hockey — Gallery</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -149,11 +149,11 @@
 
 <script>
 const T = {
-  '': { c:'#3DB06B', en:'KINGO LEAFS', abbr:'skku' },
-  '':   { c:'#2A6BBE', en:'CAPITALS',    abbr:'snu' },
-  '':   { c:'#1764E8', en:'TITANS',      abbr:'yonsei' },
-  '':   { c:'#9B2335', en:'TIGRIS',      abbr:'korea' },
-  '':   { c:'#843DA0', en:'ICE UNICORNS',abbr:'kwu' },
+  '성균관대': { c:'#3DB06B', en:'KINGO LEAFS', abbr:'skku' },
+  '서울대':   { c:'#2A6BBE', en:'CAPITALS',    abbr:'snu' },
+  '연세대':   { c:'#1764E8', en:'TITANS',      abbr:'yonsei' },
+  '고려대':   { c:'#9B2335', en:'TIGRIS',      abbr:'korea' },
+  '광운대':   { c:'#843DA0', en:'ICE UNICORNS',abbr:'kwu' },
 };
 const ABBR = {}; for (const [n,t] of Object.entries(T)) ABBR[t.abbr] = n;
 const DOW = ['SUN','MON','TUE','WED','THU','FRI','SAT'];
@@ -190,7 +190,7 @@ async function fetchDriveFiles(folderId, apiKey) {
       if (data.files) all = all.concat(data.files);
       pageToken = data.nextPageToken || '';
     } while (pageToken);
-  } catch (e) { /* network  return empty */ }error 
+  } catch (e) { /* network error — return empty */ }
   photoCache[cacheKey] = all;
   return all;
 }
