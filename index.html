@@ -689,11 +689,7 @@ const BASE_URL = 'https://lidge-jun.github.io/college-hockey-2026';
 function updateStat() {
   const el = document.getElementById('stat');
   if (team === 'all') {
-    el.innerHTML = `<span class="stat-left">${G.length} GAMES \u00b7 5 TEAMS \u00b7 4 VENUES</span>
-      <span class="cal-btns">
-        <a class="cal-btn" href="webcal://lidge-jun.github.io/college-hockey-2026/cal/all.ics">\ud83d\udcc5 Apple Cal</a>
-        <a class="cal-btn" href="https://calendar.google.com/calendar/r?cid=${BASE_URL}/cal/all.ics" target="_blank">\ud83d\udcc5 Google Cal</a>
-      </span>`;
+    el.innerHTML = `<span class="stat-left">${G.length} GAMES \u00b7 5 TEAMS \u00b7 4 VENUES</span>`;
     return;
   }
   const h = G.filter(g => g.home === team).length;
