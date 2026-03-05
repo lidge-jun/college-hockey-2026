@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>2026 College  Game Photos</title>Hockey 
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700;800&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #0c0c0f; --surface: #141418; --surface2: #1a1a20;
+      --border: #222228; --border2: #2a2a32;
+      --text: #e8e8ec; --text2: #7a7a85; --text3: #4a4a55;
+      --skku: #3DB06B; --snu: #2A6BBE; --yonsei: #1764E8; --korea: #9B2335; --kwu: #843DA0;
+    }
+    [data-theme="light"] {
+      --bg: #f6f6f8; --surface: #eeeef1; --surface2: #e4e4e8;
+      --border: #d4d4d9; --border2: #c8c8ce;
+      --text: #1a1a1f; --text2: #606068; --text3: #9a9aa2;
+      --skku: #2d8a52; --snu: #1f5499; --yonsei: #1250bf; --korea: #7e1c2c; --kwu: #6b2f85;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Barlow', sans-serif; background: var(--bg); color: var(--text); min-height: 100dvh; }
+    .wrap { max-width: 960px; margin: 0 auto; padding-bottom: 40px; }
+
+    .back-bar { padding: 14px 24px; display: flex; align-items: center; gap: 8px; }
+    .back-bar a { font-family: 'Barlow Condensed', sans-serif; font-size: 0.78rem; color: var(--text3); text-decoration: none; text-transform: uppercase; letter-spacing: 1.5px; display: flex; align-items: center; gap: 6px; transition: color 0.2s; }
+    .back-bar a:hover { color: var(--text); }
+    .back-bar a svg { width: 16px; height: 16px; }
+
+    .game-hero { padding: 28px 24px; position: relative; overflow: hidden; }
+    .hero-stripe { position: absolute; left: 0; top: 0; bottom: 0; width: 4px; display: flex; flex-direction: column; }
+    .hero-stripe .hs-home { flex: 1; }
+    .hero-stripe .hs-away { flex: 1; }
+    .hero-date { font-family: 'Barlow Condensed', sans-serif; font-size: 0.62rem; color: var(--text3); text-transform: uppercase; letter-spacing: 3px; margin-bottom: 6px; }
+    .hero-matchup { font-family: 'Barlow Condensed', sans-serif; font-size: 1.6rem; font-weight: 800; display: flex; align-items: center; gap: 10px; letter-spacing: 1px; }
+    .hero-vs { font-size: 0.6em; font-weight: 400; color: var(--text3); }
+    .hero-score { font-family: 'Barlow Condensed', sans-serif; font-size: 0.85rem; color: var(--text2); margin-top: 6px; display: flex; align-items: center; gap: 8px; }
+    .hero-score .ot { background: var(--surface2); padding: 1px 6px; border-radius: 3px; font-size: 0.65rem; letter-spacing: 1px; }
+
+    .folder-section { padding: 20px 24px 12px; }
+    .folder-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+    .folder-label { font-family: 'Barlow Condensed', sans-serif; font-size: 0.82rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1.5px; color: var(--text2); }
+    .folder-link { font-family: 'Barlow Condensed', sans-serif; font-size: 0.65rem; color: var(--text3); text-decoration: none; letter-spacing: 1px; text-transform: uppercase; display: flex; align-items: center; gap: 4px; transition: color 0.2s; }
+    .folder-link:hover { color: var(--text); }
+    .folder-link svg { width: 12px; height: 12px; }
+    .photo-count { font-family: 'Barlow Condensed', sans-serif; font-size: 0.62rem; color: var(--text3); margin-left: 8px; }
+
+    .photo-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 6px; }
+    .photo-cell { aspect-ratio: 4/3; border-radius: 6px; overflow: hidden; background: var(--surface2); cursor: pointer; position: relative; }
+    .photo-cell img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s; }
+    .photo-cell:hover img { transform: scale(1.05); }
+
+    .loading-msg { text-align: center; padding: 60px; font-family: 'Barlow Condensed', sans-serif; font-size: 0.88rem; color: var(--text3); text-transform: uppercase; letter-spacing: 2px; }
+
+    /* Lightbox */
+    .lightbox { position: fixed; inset: 0; z-index: 200; background: rgba(0,0,0,0.95); display: none; align-items: center; justify-content: center; }
+    .lightbox.open { display: flex; }
+    .lb-close { position: absolute; top: 16px; right: 16px; width: 40px; height: 40px; border-radius: 50%; background: rgba(255,255,255,0.1); border: none; color: #fff; font-size: 1.2rem; cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 210; }
+    .lb-close:hover { background: rgba(255,255,255,0.2); }
+    .lb-img-wrap { max-width: 90vw; max-height: 85vh; display: flex; align-items: center; justify-content: center; }
+    .lb-img-wrap img { max-width: 100%; max-height: 85vh; object-fit: contain; border-radius: 4px; }
+    .lb-nav { position: absolute; top: 50%; transform: translateY(-50%); width: 44px; height: 44px; border-radius: 50%; background: rgba(255,255,255,0.08); border: none; color: #fff; font-size: 1.2rem; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+    .lb-nav:hover { background: rgba(255,255,255,0.18); }
+    .lb-prev { left: 12px; }
+    .lb-next { right: 12px; }
+    .lb-counter { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); font-family: 'Barlow Condensed', sans-serif; font-size: 0.72rem; color: rgba(255,255,255,0.5); letter-spacing: 2px; }
+    .lb-download { position: absolute; bottom: 18px; right: 20px; font-family: 'Barlow Condensed', sans-serif; font-size: 0.65rem; color: rgba(255,255,255,0.4); text-decoration: none; text-transform: uppercase; letter-spacing: 1.5px; display: flex; align-items: center; gap: 4px; transition: color 0.2s; }
+    .lb-download:hover { color: rgba(255,255,255,0.8); }
+    .lb-download svg { width: 14px; height: 14px; }
+
+    @media (max-width: 600px) {
+      .game-hero { padding: 20px 14px; }
+      .hero-matchup { font-size: 1.2rem; }
+      .folder-section { padding: 16px 14px 8px; }
+      .photo-grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 4px; }
+      .lb-nav { width: 36px; height: 36px; }
+      .lb-prev { left: 6px; }
+      .lb-next { right: 6px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="back-bar">
+      <a href="gallery.html">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+        Gallery
+      </a>
+    </div>
+    <div class="game-hero" id="hero"><div class="loading-msg">Loading...</div></div>
+    <div id="folderList"><div class="loading-msg">Loading photos...</div></div>
+  </div>
+
+  <div class="lightbox" id="lightbox">
+    <button class="lb-close" id="lbClose">&#10005;</button>
+    <button class="lb-nav lb-prev" id="lbPrev">&#8249;</button>
+    <div class="lb-img-wrap"><img id="lbImg" src="" alt=""></div>
+    <button class="lb-nav lb-next" id="lbNext">&#8250;</button>
+    <div class="lb-counter" id="lbCounter"></div>
+    <a class="lb-download" id="lbDownload" href="#" target="_blank" download>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      Download
+    </a>
+  </div>
+
+<script>
+const T = {
+  '': { c:'#3DB06B', abbr:'skku' },
+  '':   { c:'#2A6BBE', abbr:'snu' },
+  '':   { c:'#1764E8', abbr:'yonsei' },
+  '':   { c:'#9B2335', abbr:'korea' },
+  '':   { c:'#843DA0', abbr:'kwu' },
+};
+const DOW = ['SUN','MON','TUE','WED','THU','FRI','SAT'];
+
+function normalizePhotos(games) {
+  const r = {};
+  for (const [id, val] of Object.entries(games)) {
+    if (Array.isArray(val)) r[id] = val;
+    else if (typeof val === 'string' && val) r[id] = [{ folderId: val, label: '' }];
+    else r[id] = [];
+  }
+  return r;
+}
+
+async function fetchDriveFiles(folderId, apiKey) {
+  if (!folderId || !apiKey) return [];
+  let all = [];
+  let pageToken = '';
+  try {
+    do {
+      const q = encodeURIComponent(`'${folderId}' in parents and trashed=false and mimeType contains 'image/'`);
+      let url = `https://www.googleapis.com/drive/v3/files?q=${q}&fields=files(id,name,mimeType),nextPageToken&pageSize=100&key=${apiKey}`;
+      if (pageToken) url += `&pageToken=${pageToken}`;
+      const res = await fetch(url);
+      if (!res.ok) break;
+      const data = await res.json();
+      if (data.files) all = all.concat(data.files);
+      pageToken = data.nextPageToken || '';
+    } while (pageToken);
+  } catch (e) { /* silent */ }
+  return all;
+}
+
+function thumbUrl(id) { return `https://drive.google.com/thumbnail?id=${id}&sz=w400`; }
+function fullUrl(id) { return `https://drive.google.com/uc?export=view&id=${id}`; }
+function dlUrl(id) { return `https://drive.google.com/uc?export=download&id=${id}`; }
+function driveLink(folderId) { return `https://drive.google.com/drive/folders/${folderId}`; }
+
+let allPhotos = [];
+let lbIdx = 0;
+
+async function init() {
+  const gameId = new URLSearchParams(location.search).get('game');
+  if (!gameId) { document.getElementById('hero').innerHTML = '<div class="loading-msg">No game specified</div>'; return; }
+
+  const [photosRes, resultsRes] = await Promise.all([
+    fetch('photos.json').then(r => r.json()).catch(() => ({ apiKey: '', games: {} })),
+    fetch('results.json').then(r => r.json()).catch(() => ({ games: [] }))
+  ]);
+
+  const apiKey = photosRes.apiKey || '';
+  const photoGames = normalizePhotos(photosRes.games);
+  const game = resultsRes.games.find(g => g.id === gameId);
+  const folders = photoGames[gameId] || [];
+
+  if (!game) { document.getElementById('hero').innerHTML = '<div class="loading-msg">Game not found</div>'; return; }
+
+  const ht = T[game.home], at = T[game.away];
+  const dt = new Date(game.date + 'T12:00:00');
+  const dateStr = `${dt.getFullYear()}.${String(dt.getMonth()+1).padStart(2,'0')}.${String(dt.getDate()).padStart(2,'0')} ${DOW[dt.getDay()]}`;
+
+  let scoreHTML = '';
+  if (game.status === 'final' && game.score) {
+    scoreHTML = `<div class="hero-score">${game.score.home} &ndash; ${game.score.away} FINAL${game.overtime ? ' <span class="ot">OT</span>' : ''}</div>`;
+  }
+
+  document.getElementById('hero').innerHTML = `
+    <div class="hero-stripe"><div class="hs-home" style="background:${ht?.c||'#555'}"></div><div class="hs-away" style="background:${at?.c||'#555'}"></div></div>
+    <div class="hero-date">${dateStr} · ${game.venue}</div>
+    <div class="hero-matchup">
+      <span style="color:${ht?.c||'#fff'}">${game.home}</span>
+      <span class="hero-vs">VS</span>
+      <span style="color:${at?.c||'#fff'}">${game.away}</span>
+    </div>
+    ${scoreHTML}`;
+
+  document.title = `${game.home} vs ${game.away} — Photos`;
+
+  if (!folders.length) {
+    document.getElementById('folderList').innerHTML = '<div class="loading-msg">No photos available for this game</div>';
+    return;
+  }
+
+  const folderWrap = document.getElementById('folderList');
+  folderWrap.innerHTML = '';
+
+  for (let i = 0; i < folders.length; i++) {
+    const folder = folders[i];
+    const files = await fetchDriveFiles(folder.folderId, apiKey);
+    const startIdx = allPhotos.length;
+    allPhotos = allPhotos.concat(files.map(f => ({ ...f, folderIdx: i })));
+
+    const section = document.createElement('div');
+    section.className = 'folder-section';
+
+    const label = folder.label || `Photos ${i + 1}`;
+    section.innerHTML = `
+      <div class="folder-head">
+        <div style="display:flex;align-items:center;">
+          <span class="folder-label">${label}</span>
+          <span class="photo-count">${files.length} photos</span>
+        </div>
+        <a class="folder-link" href="${driveLink(folder.folderId)}" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          Drive Folder
+        </a>
+      </div>
+      <div class="photo-grid">${files.map((f, j) =>
+        `<div class="photo-cell" data-idx="${startIdx + j}"><img src="${thumbUrl(f.id)}" alt="${f.name}" loading="lazy"></div>`
+      ).join('')}</div>`;
+
+    folderWrap.appendChild(section);
+  }
+
+  folderWrap.addEventListener('click', e => {
+    const cell = e.target.closest('.photo-cell');
+    if (!cell) return;
+    openLightbox(parseInt(cell.dataset.idx));
+  });
+}
+
+function openLightbox(idx) {
+  lbIdx = idx;
+  const lb = document.getElementById('lightbox');
+  lb.classList.add('open');
+  document.body.style.overflow = 'hidden';
+  showPhoto();
+}
+
+function closeLightbox() {
+  document.getElementById('lightbox').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function showPhoto() {
+  if (!allPhotos[lbIdx]) return;
+  const f = allPhotos[lbIdx];
+  document.getElementById('lbImg').src = fullUrl(f.id);
+  document.getElementById('lbCounter').textContent = `${lbIdx + 1} / ${allPhotos.length}`;
+  document.getElementById('lbDownload').href = dlUrl(f.id);
+}
+
+document.getElementById('lbClose').addEventListener('click', closeLightbox);
+document.getElementById('lbPrev').addEventListener('click', () => { lbIdx = (lbIdx - 1 + allPhotos.length) % allPhotos.length; showPhoto(); });
+document.getElementById('lbNext').addEventListener('click', () => { lbIdx = (lbIdx + 1) % allPhotos.length; showPhoto(); });
+document.getElementById('lightbox').addEventListener('click', e => { if (e.target === e.currentTarget) closeLightbox(); });
+
+document.addEventListener('keydown', e => {
+  if (!document.getElementById('lightbox').classList.contains('open')) return;
+  if (e.key === 'Escape') closeLightbox();
+  if (e.key === 'ArrowLeft') { lbIdx = (lbIdx - 1 + allPhotos.length) % allPhotos.length; showPhoto(); }
+  if (e.key === 'ArrowRight') { lbIdx = (lbIdx + 1) % allPhotos.length; showPhoto(); }
+});
+
+// Swipe support
+let tx = 0;
+document.getElementById('lightbox').addEventListener('touchstart', e => { tx = e.changedTouches[0].screenX; }, { passive: true });
+document.getElementById('lightbox').addEventListener('touchend', e => {
+  const dx = e.changedTouches[0].screenX - tx;
+  if (Math.abs(dx) < 50) return;
+  if (dx > 0) { lbIdx = (lbIdx - 1 + allPhotos.length) % allPhotos.length; }
+  else { lbIdx = (lbIdx + 1) % allPhotos.length; }
+  showPhoto();
+}, { passive: true });
+
+// Theme persistence
+const saved = localStorage.getItem('theme') || (matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+document.documentElement.setAttribute('data-theme', saved);
+
+init();
+</script>
+</body>
+</html>

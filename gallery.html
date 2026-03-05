@@ -3,172 +3,107 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Gallery – 2026 대학 아이스하키 리그</title>
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%23111114'/%3E%3Cpath d='M18 44 L46 20' stroke='%23ccc' stroke-width='3.5' stroke-linecap='round'/%3E%3Cpath d='M44 18 L48 16 L46 20' fill='%23ccc'/%3E%3Ccircle cx='24' cy='38' r='5' fill='none' stroke='%23fff' stroke-width='2'/%3E%3C/svg%3E">
+  <title>2026 College  Gallery</title>Hockey 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700;800&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
-      --bg: #111114; --surface: #18181c; --surface2: #1f1f24;
-      --border: #25252b; --border2: #303038;
+      --bg: #0c0c0f; --surface: #141418; --surface2: #1a1a20;
+      --border: #222228; --border2: #2a2a32;
       --text: #e8e8ec; --text2: #7a7a85; --text3: #4a4a55;
-      --accent: #4a9eff;
+      --glow: rgba(255,255,255,0.03);
+      --skku: #3DB06B; --snu: #2A6BBE; --yonsei: #1764E8; --korea: #9B2335; --kwu: #843DA0;
     }
-    html.light {
-      --bg: #f5f5f7; --surface: #ffffff; --surface2: #eeeef0;
-      --border: #d8d8dc; --border2: #c5c5cb;
-      --text: #111114; --text2: #55555e; --text3: #88889a;
+    [data-theme="light"] {
+      --bg: #f6f6f8; --surface: #eeeef1; --surface2: #e4e4e8;
+      --border: #d4d4d9; --border2: #c8c8ce;
+      --text: #1a1a1f; --text2: #606068; --text3: #9a9aa2;
+      --glow: rgba(0,0,0,0.02);
+      --skku: #2d8a52; --snu: #1f5499; --yonsei: #1250bf; --korea: #7e1c2c; --kwu: #6b2f85;
     }
-    body { font-family: 'Barlow', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Barlow', sans-serif; background: var(--bg); color: var(--text); min-height: 100dvh; -webkit-font-smoothing: antialiased; }
     .wrap { max-width: 960px; margin: 0 auto; }
 
-    /* Header */
-    header {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 20px 24px; border-bottom: 2px solid var(--text);
-    }
-    .hdr-left { display: flex; align-items: center; gap: 14px; }
-    .hdr-left svg { width: 36px; height: 36px; color: var(--text2); }
-    h1 { font-family: 'Barlow Condensed', sans-serif; font-size: 1.4rem; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; }
-    h1 span { color: var(--text2); margin-left: 6px; font-weight: 400; }
-    .hdr-sub { font-family: 'Barlow Condensed', sans-serif; font-size: 0.65rem; color: var(--text3); text-transform: uppercase; letter-spacing: 3px; }
+    header { display: flex; align-items: center; justify-content: space-between; padding: 40px 24px 0; }
+    .header-left { display: flex; align-items: center; gap: 16px; }
+    .header-logo { width: 48px; height: 48px; flex-shrink: 0; }
+    .header-logo svg { width: 100%; height: 100%; color: var(--text); }
+    header h1 { font-family: 'Barlow Condensed', sans-serif; font-size: clamp(2rem, 5vw, 2.8rem); font-weight: 700; text-transform: uppercase; letter-spacing: 3px; line-height: 1; }
+    .h1-year { font-weight: 400; font-size: 0.5em; letter-spacing: 1px; vertical-align: super; color: var(--text2); margin-left: 4px; }
+    .header-sub { font-family: 'Barlow Condensed', sans-serif; font-size: 0.76rem; color: var(--text3); text-transform: uppercase; letter-spacing: 4px; margin-top: 4px; }
+    .team-gradient { height: 3px; margin-top: 20px; background: linear-gradient(90deg, var(--skku) 0%, var(--skku) 20%, var(--snu) 20%, var(--snu) 40%, var(--yonsei) 40%, var(--yonsei) 60%, var(--korea) 60%, var(--korea) 80%, var(--kwu) 80%, var(--kwu) 100%); opacity: 0.8; }
+    .theme-btn { background: none; border: 1px solid var(--border2); color: var(--text2); width: 36px; height: 36px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: border-color 0.2s, color 0.2s; flex-shrink: 0; }
+    .theme-btn:hover { border-color: var(--text2); color: var(--text); }
+    .theme-btn svg { width: 18px; height: 18px; fill: currentColor; }
 
-    /* Nav */
-    .nav {
-      display: flex; gap: 0; border-bottom: 1px solid var(--border);
-      font-family: 'Barlow Condensed', sans-serif; font-size: 0.75rem;
-      font-weight: 600; text-transform: uppercase; letter-spacing: 2px;
-    }
-    .nav a {
-      padding: 12px 24px; color: var(--text3); text-decoration: none;
-      border-bottom: 2px solid transparent; transition: all 0.2s;
-    }
-    .nav a:hover { color: var(--text); }
+    .nav { display: flex; gap: 0; background: var(--surface); border-bottom: 1px solid var(--border); }
+    .nav a { padding: 12px 20px; font-family: 'Barlow Condensed', sans-serif; font-size: 0.88rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: var(--text3); text-decoration: none; border-bottom: 2px solid transparent; margin-bottom: -1px; transition: color 0.15s; }
+    .nav a:hover { color: var(--text2); }
     .nav a.on { color: var(--text); border-bottom-color: var(--text); }
 
-    /* Game Selector */
-    .selector { padding: 16px 24px; border-bottom: 1px solid var(--border); }
-    .selector select {
-      width: 100%; padding: 10px 14px; border-radius: 8px;
-      background: var(--surface2); color: var(--text); border: 1px solid var(--border2);
-      font-family: 'Barlow', sans-serif; font-size: 0.85rem; cursor: pointer;
-    }
+    .tabs { display: flex; padding: 0; border-bottom: 1px solid var(--border); overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    .tabs::-webkit-scrollbar { display: none; }
+    .tab { font-family: 'Barlow Condensed', sans-serif; font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; padding: 12px 20px; background: none; border: none; color: var(--text3); cursor: pointer; white-space: nowrap; border-bottom: 2px solid transparent; transition: all 0.2s; }
+    .tab:hover { color: var(--text2); }
+    .tab.on { color: var(--text); border-bottom-color: var(--text); }
 
-    /* Upload Zone */
-    .upload-zone {
-      margin: 16px 24px; padding: 32px; border: 2px dashed var(--border2);
-      border-radius: 12px; text-align: center; cursor: pointer; transition: all 0.2s;
-    }
-    .upload-zone:hover, .upload-zone.dragover { border-color: var(--accent); background: rgba(74,158,255,0.05); }
-    .upload-zone svg { width: 36px; height: 36px; color: var(--text3); margin-bottom: 8px; }
-    .upload-zone p { font-size: 0.8rem; color: var(--text3); }
-    .upload-zone span { font-size: 0.65rem; color: var(--text3); opacity: 0.6; }
-    .upload-zone input { display: none; }
-    .upload-progress { margin: 8px 24px; }
-    .upload-bar { height: 4px; border-radius: 2px; background: var(--border); overflow: hidden; }
-    .upload-bar-fill { height: 100%; background: var(--accent); width: 0; transition: width 0.3s; }
+    .jump-bar { position: sticky; top: 0; z-index: 50; background: rgba(12,12,15,0.92); backdrop-filter: blur(12px); padding: 10px 24px; border-bottom: 1px solid var(--border); }
+    [data-theme="light"] .jump-bar { background: rgba(246,246,248,0.92); }
+    .jump-bar select { width: 100%; padding: 10px 14px; border-radius: 8px; background: var(--surface2); color: var(--text); border: 1px solid var(--border2); font-family: 'Barlow', sans-serif; font-size: 0.82rem; cursor: pointer; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%237a7a85' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; }
 
-    /* Photo Grid */
-    .grid {
-      display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-      gap: 4px; padding: 4px 24px 24px;
-    }
-    .grid-item {
-      position: relative; aspect-ratio: 4/3; overflow: hidden;
-      border-radius: 4px; cursor: pointer; background: var(--surface2);
-    }
-    .grid-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s; }
-    .grid-item:hover img { transform: scale(1.05); }
-    .grid-item .dl-btn {
-      position: absolute; bottom: 6px; right: 6px; background: rgba(0,0,0,0.7);
-      border: none; border-radius: 6px; padding: 6px; cursor: pointer; opacity: 0;
-      transition: opacity 0.2s; color: #fff;
-    }
-    .grid-item:hover .dl-btn { opacity: 1; }
-    .grid-item .dl-btn svg { width: 16px; height: 16px; }
-    .grid-item .del-btn {
-      position: absolute; top: 6px; right: 6px; background: rgba(180,40,40,0.8);
-      border: none; border-radius: 6px; padding: 4px; cursor: pointer; opacity: 0;
-      transition: opacity 0.2s; color: #fff;
-    }
-    .grid-item:hover .del-btn { opacity: 1; }
-    .grid-item .del-btn svg { width: 14px; height: 14px; }
+    .game-block { border-bottom: 1px solid var(--border); padding: 20px 24px 16px; margin-bottom: 8px; position: relative; transition: background 0.3s; }
+    .game-block:hover { background: var(--glow); }
+    .dual-stripe { position: absolute; left: 0; top: 0; bottom: 0; width: 4px; display: flex; flex-direction: column; }
+    .dual-stripe .s-home { flex: 1; }
+    .dual-stripe .s-away { flex: 1; }
+    .gb-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 12px; }
+    .gb-date { font-family: 'Barlow Condensed', sans-serif; font-size: 0.6rem; font-weight: 600; text-transform: uppercase; letter-spacing: 2.5px; color: var(--text3); margin-bottom: 4px; }
+    .gb-matchup { font-family: 'Barlow Condensed', sans-serif; font-size: 1.1rem; font-weight: 700; display: flex; align-items: center; gap: 8px; letter-spacing: 0.5px; }
+    .gb-vs { font-size: 0.6rem; font-weight: 400; color: var(--text3); letter-spacing: 2px; }
+    .gb-right { display: flex; align-items: center; gap: 10px; }
+    .gb-badge { font-family: 'Barlow Condensed', sans-serif; font-size: 0.6rem; color: var(--text3); display: flex; align-items: center; gap: 4px; background: var(--surface2); padding: 3px 8px; border-radius: 4px; }
+    .gb-badge svg { width: 11px; height: 11px; }
+    .gb-more { width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; background: var(--surface2); color: var(--text3); border: 1px solid var(--border2); border-radius: 6px; cursor: pointer; text-decoration: none; transition: all 0.2s; }
+    .gb-more:hover { color: var(--text); border-color: var(--text3); }
+    .gb-more svg { width: 14px; height: 14px; }
 
-    /* Empty State */
-    .empty { text-align: center; padding: 60px 24px; color: var(--text3); }
-    .empty svg { width: 48px; height: 48px; margin-bottom: 12px; opacity: 0.4; }
-    .empty p { font-size: 0.85rem; }
-    .empty .sub { font-size: 0.7rem; margin-top: 6px; opacity: 0.6; }
+    .photo-strip { display: flex; gap: 6px; overflow-x: auto; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+    .photo-strip::-webkit-scrollbar { display: none; }
+    .photo-strip-item { flex: 0 0 200px; height: 134px; scroll-snap-align: start; border-radius: 6px; overflow: hidden; background: var(--surface2); cursor: pointer; position: relative; }
+    .photo-strip-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease; }
+    .photo-strip-item:hover img { transform: scale(1.06); }
+    .photo-strip-item::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 40px; background: linear-gradient(transparent, rgba(0,0,0,0.3)); pointer-events: none; }
+    .photo-strip-more { flex: 0 0 80px; height: 134px; scroll-snap-align: start; border-radius: 6px; background: var(--surface2); border: 1px solid var(--border2); display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; text-decoration: none; color: var(--text3); transition: all 0.25s; }
+    .photo-strip-more:hover { border-color: var(--text3); color: var(--text2); background: var(--surface); }
+    .photo-strip-more svg { width: 20px; height: 20px; margin-bottom: 4px; }
+    .photo-strip-more span { font-family: 'Barlow Condensed', sans-serif; font-size: 0.58rem; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 600; }
 
-    /* Setup Banner */
-    .setup-banner {
-      margin: 16px 24px; padding: 20px; background: var(--surface2);
-      border-radius: 12px; border-left: 3px solid var(--accent);
-    }
-    .setup-banner h3 { font-family: 'Barlow Condensed', sans-serif; font-size: 0.9rem; margin-bottom: 8px; }
-    .setup-banner ol { padding-left: 20px; font-size: 0.75rem; color: var(--text2); line-height: 1.8; }
-    .setup-banner code { background: var(--bg); padding: 2px 6px; border-radius: 4px; font-size: 0.7rem; }
+    .photo-strip-empty { width: 100%; height: 80px; border-radius: 6px; border: 1px dashed var(--border2); display: flex; align-items: center; justify-content: center; gap: 8px; color: var(--text3); font-size: 0.72rem; }
 
-    /* Lightbox */
-    .lightbox {
-      position: fixed; inset: 0; background: rgba(0,0,0,0.95);
-      z-index: 1000; display: none; align-items: center; justify-content: center;
-      flex-direction: column;
-    }
-    .lightbox.show { display: flex; }
-    .lb-img { max-width: 90vw; max-height: 80vh; object-fit: contain; border-radius: 4px; user-select: none; }
-    .lb-close {
-      position: absolute; top: 16px; right: 16px; background: none;
-      border: none; color: #fff; cursor: pointer; padding: 8px;
-    }
-    .lb-close svg { width: 28px; height: 28px; }
-    .lb-nav {
-      position: absolute; top: 50%; transform: translateY(-50%);
-      background: rgba(255,255,255,0.1); border: none; color: #fff;
-      width: 44px; height: 44px; border-radius: 50%; cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
-      transition: background 0.2s;
-    }
-    .lb-nav:hover { background: rgba(255,255,255,0.2); }
-    .lb-nav svg { width: 22px; height: 22px; }
-    .lb-prev { left: 16px; }
-    .lb-next { right: 16px; }
-    .lb-counter {
-      position: absolute; bottom: 20px; color: rgba(255,255,255,0.6);
-      font-family: 'Barlow Condensed', sans-serif; font-size: 0.8rem; letter-spacing: 2px;
-    }
-    .lb-download {
-      position: absolute; bottom: 16px; right: 20px; background: rgba(255,255,255,0.1);
-      border: none; color: #fff; padding: 8px 16px; border-radius: 8px; cursor: pointer;
-      font-family: 'Barlow Condensed', sans-serif; font-size: 0.75rem;
-      letter-spacing: 1px; text-transform: uppercase; display: flex; align-items: center; gap: 6px;
-    }
-    .lb-download:hover { background: rgba(255,255,255,0.2); }
-    .lb-download svg { width: 16px; height: 16px; }
+    .loading-msg { text-align: center; padding: 60px 20px; font-family: 'Barlow Condensed', sans-serif; font-size: 0.88rem; color: var(--text3); text-transform: uppercase; letter-spacing: 2px; }
 
-    /* Count badge */
-    .photo-count {
-      padding: 4px 24px 12px; font-family: 'Barlow Condensed', sans-serif;
-      font-size: 0.7rem; color: var(--text3); text-transform: uppercase; letter-spacing: 2px;
-    }
+    footer { text-align: center; padding: 32px 20px; font-size: 0.68rem; color: var(--text3); }
 
-    footer { text-align: center; padding: 24px; font-size: 0.65rem; color: var(--text3); }
-
-    @media (max-width: 600px) {
-      .grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); padding: 4px 12px 12px; }
-      .selector, .upload-zone, .setup-banner, .photo-count { margin-left: 12px; margin-right: 12px; }
-      .selector { padding: 12px; }
-      h1 { font-size: 1.1rem; }
+    @media (max-width: 768px) {
+      header { padding: 28px 14px 0; }
+      .game-block { padding: 16px 14px 12px; }
+      .photo-strip-item { flex: 0 0 160px; height: 108px; }
+      .photo-strip-more { flex: 0 0 64px; height: 108px; }
+      .gb-matchup { font-size: 0.95rem; }
+      .jump-bar { padding: 8px 14px; }
+      .nav a { padding: 10px 14px; font-size: 0.82rem; }
+      .tab { padding: 10px 14px; font-size: 0.8rem; }
     }
   </style>
 </head>
 <body>
   <div class="wrap">
     <header>
-      <div class="hdr-left">
-        <div>
+      <div class="header-left">
+        <div class="header-logo">
           <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" fill="none">
             <path d="M14 8 L30 42 L30 50 Q30 54 34 54 L44 54 Q48 54 48 50 L48 46" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
             <path d="M30 50 Q30 54 34 54 L44 54 Q48 54 48 50 L48 46 L30 46 Z" fill="currentColor" opacity="0.15"/>
@@ -178,11 +113,15 @@
           </svg>
         </div>
         <div>
-          <h1>College Hockey<span>2026</span></h1>
-          <div class="hdr-sub">Game Photo Gallery</div>
+          <h1>Gallery<span class="h1-year">2026</span></h1>
+          <div class="header-sub">University Amateur Ice Hockey League</div>
         </div>
       </div>
+      <button class="theme-btn" id="themeBtn" aria-label="Toggle theme">
+        <svg id="themeIcon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18Zm0 16.2V4.8a7.2 7.2 0 0 1 0 14.4Z"/></svg>
+      </button>
     </header>
+    <div class="team-gradient"></div>
 
     <nav class="nav">
       <a href="index.html">Schedule</a>
@@ -190,277 +129,194 @@
       <a href="gallery.html" class="on">Gallery</a>
     </nav>
 
-    <div class="selector">
-      <select id="gamePicker"></select>
+    <nav class="tabs" id="tabs">
+      <button class="tab on" data-t="all">All</button>
+      <button class="tab" data-t="korea">Tigris</button>
+      <button class="tab" data-t="yonsei">Titans</button>
+      <button class="tab" data-t="skku">Kingo Leafs</button>
+      <button class="tab" data-t="snu">Capitals</button>
+      <button class="tab" data-t="kwu">Unicorns</button>
+    </nav>
+
+    <div class="jump-bar">
+      <select id="jumpSelect"><</option></select>option                                                                                  value="">
     </div>
 
-    <div id="setupBanner" class="setup-banner" style="display:none">
-      <h3>🔧 Firebase Setup Required</h3>
-      <ol>
-        <li>Go to <a href="https://console.firebase.google.com" target="_blank" style="color:var(--accent)">Firebase Console</a> → Create Project</li>
-        <li>Enable <strong>Storage</strong> → Start in production mode</li>
-        <li>Set Storage rules to allow reads: <code>allow read: if true;</code></li>
-        <li>Go to Project Settings → Web App → Copy config</li>
-        <li>Edit <code>gallery.html</code> → paste config into <code>FIREBASE_CONFIG</code></li>
-      </ol>
-    </div>
+    <div id="blockList"><div class="loading-msg">Loading gallery...</div></div>
 
-    <div id="uploadZone" class="upload-zone" style="display:none">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>
-      </svg>
-      <p>Drop photos here or click to upload</p>
-      <span>JPG, PNG, WEBP · max 10MB each</span>
-      <input type="file" id="fileInput" multiple accept="image/*">
-    </div>
-    <div id="uploadProgress" class="upload-progress" style="display:none">
-      <div class="upload-bar"><div class="upload-bar-fill" id="uploadBarFill"></div></div>
-    </div>
-
-    <div id="photoCount" class="photo-count"></div>
-    <div id="grid" class="grid"></div>
-    <div id="emptyState" class="empty" style="display:none">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-        <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/>
-        <path d="m21 15-5-5L5 21"/>
-      </svg>
-      <p>No photos yet</p>
-      <div class="sub">Upload photos to get started</div>
-    </div>
-
-    <footer>Photos stored in Firebase Storage</footer>
+    <footer> : 2026.03.                                                                                       </footer>
   </div>
 
-  <!-- Lightbox -->
-  <div class="lightbox" id="lightbox">
-    <button class="lb-close" id="lbClose"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
-    <button class="lb-nav lb-prev" id="lbPrev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg></button>
-    <img class="lb-img" id="lbImg" src="" alt="">
-    <button class="lb-nav lb-next" id="lbNext"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></button>
-    <div class="lb-counter" id="lbCounter"></div>
-    <button class="lb-download" id="lbDownload"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Download</button>
-  </div>
-
-<script type="module">
-// ── Firebase Config ──────────────────────────────────
-// Paste your Firebase config here after creating a project
-const FIREBASE_CONFIG = {
-  apiKey: "",
-  authDomain: "",
-  projectId: "",
-  storageBucket: "",
-  messagingSenderId: "",
-  appId: ""
+<script>
+const T = {
+  '': { c:'#3DB06B', en:'KINGO LEAFS', abbr:'skku' },
+  '':   { c:'#2A6BBE', en:'CAPITALS',    abbr:'snu' },
+  '':   { c:'#1764E8', en:'TITANS',      abbr:'yonsei' },
+  '':   { c:'#9B2335', en:'TIGRIS',      abbr:'korea' },
+  '':   { c:'#843DA0', en:'ICE UNICORNS',abbr:'kwu' },
 };
+const ABBR = {}; for (const [n,t] of Object.entries(T)) ABBR[t.abbr] = n;
+const DOW = ['SUN','MON','TUE','WED','THU','FRI','SAT'];
 
-const IS_CONFIGURED = FIREBASE_CONFIG.apiKey !== "";
+let activeTeam = 'all';
+let photoConfig = null;
+let gameList = [];
+let photoCache = {};
 
-// ── Game Data ────────────────────────────────────────
-const GAMES = [
-  { id:'0308-korea-skku',     label:'3/8 (일) 고려대 vs 성균관대 · 고대링크 22:30' },
-  { id:'0308-yonsei-kwu',     label:'3/8 (일) 연세대 vs 광운대 · 목동 07:30' },
-  { id:'0313-snu-kwu',        label:'3/13 (금) 서울대 vs 광운대 · 목동 23:00' },
-  { id:'0313-kwu-snu',        label:'3/13 (금) 광운대 vs 서울대 · 광운대 20:30' },
-  { id:'0314-yonsei-snu',     label:'3/14 (토) 연세대 vs 서울대 · 목동 00:30' },
-  { id:'0315-skku-yonsei',    label:'3/15 (일) 성균관대 vs 연세대 · 수원 22:00' },
-  { id:'0315-korea-snu',      label:'3/15 (일) 고려대 vs 서울대 · 고대링크 22:30' },
-  { id:'0320-snu-skku',       label:'3/20 (금) 서울대 vs 성균관대 · 목동 23:00' },
-  { id:'0322-korea-yonsei',   label:'3/22 (일) 고려대 vs 연세대 · 고대링크 22:30' },
-  { id:'0328-kwu-yonsei',     label:'3/28 (토) 광운대 vs 연세대 · 광운대 17:30' },
-  { id:'0329-skku-kwu',       label:'3/29 (일) 성균관대 vs 광운대 · 수원 22:00' },
-  { id:'0403-snu-yonsei',     label:'4/3 (금) 서울대 vs 연세대 · 목동 23:00' },
-  { id:'0404-yonsei-skku',    label:'4/4 (토) 연세대 vs 성균관대 · 목동 00:30' },
-  { id:'0404-kwu-korea',      label:'4/4 (토) 광운대 vs 고려대 · 광운대 17:30' },
-  { id:'0405-skku-snu',       label:'4/5 (일) 성균관대 vs 서울대 · 수원 22:00' },
-  { id:'0405-korea-kwu',      label:'4/5 (일) 고려대 vs 광운대 · 고대링크 22:30' },
-  { id:'0410-snu-korea',      label:'4/10 (금) 서울대 vs 고려대 · 목동 23:00' },
-  { id:'0419-skku-korea',     label:'4/19 (일) 성균관대 vs 고려대 · 수원 22:00' },
-  { id:'0425-kwu-skku',       label:'4/25 (토) 광운대 vs 성균관대 · 광운대 17:30' },
-  { id:'0503-yonsei-korea',   label:'5/3 (일) 연세대 vs 고려대 · 목동 07:30' },
-];
-
-// ── State ────────────────────────────────────────────
-let photos = [];
-let lbIndex = 0;
-let app, storage;
-
-// ── DOM ──────────────────────────────────────────────
-const picker     = document.getElementById('gamePicker');
-const grid       = document.getElementById('grid');
-const emptyState = document.getElementById('emptyState');
-const uploadZone = document.getElementById('uploadZone');
-const fileInput  = document.getElementById('fileInput');
-const uploadProg = document.getElementById('uploadProgress');
-const uploadFill = document.getElementById('uploadBarFill');
-const countEl    = document.getElementById('photoCount');
-const setupEl    = document.getElementById('setupBanner');
-const lightbox   = document.getElementById('lightbox');
-const lbImg      = document.getElementById('lbImg');
-const lbCounter  = document.getElementById('lbCounter');
-
-// ── Init ─────────────────────────────────────────────
-function buildPicker() {
-  GAMES.forEach(g => {
-    const o = document.createElement('option');
-    o.value = g.id; o.textContent = g.label;
-    picker.appendChild(o);
-  });
-  const params = new URLSearchParams(location.search);
-  if (params.get('game')) picker.value = params.get('game');
+function normalizePhotos(games) {
+  const r = {};
+  for (const [id, val] of Object.entries(games)) {
+    if (Array.isArray(val)) r[id] = val;
+    else if (typeof val === 'string' && val) r[id] = [{ folderId: val, label: '' }];
+    else r[id] = [];
+  }
+  return r;
 }
+
+async function fetchDriveFiles(folderId, apiKey) {
+  if (!folderId || !apiKey) return [];
+  const cacheKey = folderId;
+  if (photoCache[cacheKey]) return photoCache[cacheKey];
+  let all = [];
+  let pageToken = '';
+  try {
+    do {
+      const q = encodeURIComponent(`'${folderId}' in parents and trashed=false and mimeType contains 'image/'`);
+      let url = `https://www.googleapis.com/drive/v3/files?q=${q}&fields=files(id,name,mimeType),nextPageToken&pageSize=100&key=${apiKey}`;
+      if (pageToken) url += `&pageToken=${pageToken}`;
+      const res = await fetch(url);
+      if (!res.ok) break;
+      const data = await res.json();
+      if (data.files) all = all.concat(data.files);
+      pageToken = data.nextPageToken || '';
+    } while (pageToken);
+  } catch (e) { /* network  return empty */ }error 
+  photoCache[cacheKey] = all;
+  return all;
+}
+
+function thumbUrl(fileId) { return `https://drive.google.com/thumbnail?id=${fileId}&sz=w400`; }
 
 async function init() {
-  buildPicker();
-  if (!IS_CONFIGURED) {
-    setupEl.style.display = 'block';
-    emptyState.style.display = 'block';
-    return;
-  }
-  const { initializeApp } = await import('https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js');
-  const mod = await import('https://www.gstatic.com/firebasejs/10.14.1/firebase-storage.js');
-  app = initializeApp(FIREBASE_CONFIG);
-  storage = mod.getStorage(app);
-  window._fb = mod;
-  uploadZone.style.display = 'block';
-  loadPhotos();
+  const [photosRes, resultsRes] = await Promise.all([
+    fetch('photos.json').then(r => r.json()).catch(() => ({ apiKey: '', games: {} })),
+    fetch('results.json').then(r => r.json()).catch(() => ({ games: [] }))
+  ]);
+
+  photoConfig = { apiKey: photosRes.apiKey, games: normalizePhotos(photosRes.games) };
+
+  // Build game list from results.json
+  gameList = resultsRes.games.map(g => {
+    const parts = g.id.split('-');
+    const homeAbbr = parts[1], awayAbbr = parts[2];
+    const homeName = g.home, awayName = g.away;
+    const dt = new Date(g.date + 'T12:00:00');
+    const folders = photoConfig.games[g.id] || [];
+    return { id: g.id, date: g.date, dt, home: homeName, away: awayName, homeAbbr, awayAbbr, venue: g.venue, folders, score: g.status === 'final' ? g.score : null, overtime: g.overtime };
+  });
+
+  gameList.sort((a, b) => a.date.localeCompare(b.date));
+  populateDropdown();
+  await renderBlocks();
 }
 
-// ── Firebase Storage ─────────────────────────────────
-async function loadPhotos() {
-  const { ref, listAll, getDownloadURL } = window._fb;
-  const gameId = picker.value;
-  const folderRef = ref(storage, `games/${gameId}`);
-  try {
-    const res = await listAll(folderRef);
-    photos = [];
-    const urls = await Promise.all(res.items.map(async item => {
-      const url = await getDownloadURL(item);
-      return { url, name: item.name, ref: item };
-    }));
-    photos = urls.sort((a, b) => a.name.localeCompare(b.name));
-  } catch (e) {
-    console.warn('Load error:', e);
-    photos = [];
-  }
-  renderGrid();
-}
-
-async function uploadFiles(files) {
-  const { ref, uploadBytes, getDownloadURL } = window._fb;
-  const gameId = picker.value;
-  uploadProg.style.display = 'block';
-  let done = 0;
-  for (const file of files) {
-    if (!file.type.startsWith('image/') || file.size > 10 * 1024 * 1024) continue;
-    const ts = Date.now();
-    const ext = file.name.split('.').pop();
-    const fileRef = ref(storage, `games/${gameId}/${ts}.${ext}`);
-    await uploadBytes(fileRef, file);
-    done++;
-    uploadFill.style.width = `${(done / files.length) * 100}%`;
-  }
-  setTimeout(() => { uploadProg.style.display = 'none'; uploadFill.style.width = '0'; }, 800);
-  loadPhotos();
-}
-
-async function deletePhoto(photo) {
-  if (!confirm('Delete this photo?')) return;
-  const { deleteObject } = window._fb;
-  try { await deleteObject(photo.ref); } catch (e) { console.error(e); }
-  loadPhotos();
-}
-
-// ── Render ───────────────────────────────────────────
-function renderGrid() {
-  grid.innerHTML = '';
-  countEl.textContent = photos.length ? `${photos.length} PHOTO${photos.length > 1 ? 'S' : ''}` : '';
-  emptyState.style.display = photos.length ? 'none' : 'block';
-  photos.forEach((p, i) => {
-    const div = document.createElement('div');
-    div.className = 'grid-item';
-    div.innerHTML = `
-      <img src="${p.url}" alt="${p.name}" loading="lazy">
-      <button class="dl-btn" title="Download"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></button>
-      <button class="del-btn" title="Delete"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>`;
-    div.querySelector('img').addEventListener('click', () => openLightbox(i));
-    div.querySelector('.dl-btn').addEventListener('click', e => { e.stopPropagation(); downloadPhoto(p); });
-    div.querySelector('.del-btn').addEventListener('click', e => { e.stopPropagation(); deletePhoto(p); });
-    grid.appendChild(div);
+function populateDropdown() {
+  const sel = document.getElementById('jumpSelect');
+  gameList.forEach(g => {
+    if (!g.folders.length) return;
+    const dt = g.dt;
+    const label = `${dt.getMonth()+1}/${dt.getDate()} ${DOW[dt.getDay()]} ${g.home} vs ${g.away}`;
+    const opt = document.createElement('option');
+    opt.value = g.id;
+    opt.textContent = label;
+    sel.appendChild(opt);
+  });
+  sel.addEventListener('change', () => {
+    if (!sel.value) return;
+    const el = document.getElementById('blk-' + sel.value);
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
   });
 }
 
-// ── Download ─────────────────────────────────────────
-async function downloadPhoto(photo) {
-  try {
-    const resp = await fetch(photo.url, { mode: 'cors' });
-    const blob = await resp.blob();
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-    a.download = photo.name;
-    a.click();
-    URL.revokeObjectURL(a.href);
-  } catch {
-    window.open(photo.url, '_blank');
+async function renderBlocks() {
+  const wrap = document.getElementById('blockList');
+  const filtered = activeTeam === 'all'
+    ? gameList
+    : gameList.filter(g => T[g.home]?.abbr === activeTeam || T[g.away]?.abbr === activeTeam);
+
+  const withPhotos = filtered.filter(g => g.folders.length > 0);
+
+  if (!withPhotos.length) {
+    wrap.innerHTML = '<div class="loading-msg">No photos yet — season starts Mar 8</div>';
+    return;
   }
+
+  let html = '';
+  for (const g of withPhotos) {
+    const ht = T[g.home], at = T[g.away];
+    const dt = g.dt;
+    const dateStr = `${dt.getMonth()+1}/${dt.getDate()} ${DOW[dt.getDay()]}`;
+
+    // Fetch photos from all folders
+    let allPhotos = [];
+    for (const folder of g.folders) {
+      const files = await fetchDriveFiles(folder.folderId, photoConfig.apiKey);
+      allPhotos = allPhotos.concat(files);
+    }
+
+    // Shuffle and take max 10
+    const shuffled = allPhotos.sort(() => Math.random() - 0.5).slice(0, 10);
+    const totalCount = allPhotos.length;
+
+    const stripHTML = shuffled.length
+      ? shuffled.map(f => `<div class="photo-strip-item"><img src="${thumbUrl(f.id)}" alt="${f.name}" loading="lazy"></div>`).join('')
+        + `<a class="photo-strip-more" href="gallery-detail.html?game=${g.id}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg><span>View All</span></a>`
+      : `<div class="photo-strip-empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>Loading...</div>`;
+
+    html += `<div class="game-block" id="blk-${g.id}">
+      <div class="dual-stripe"><div class="s-home" style="background:${ht?.c||'#555'}"></div><div class="s-away" style="background:${at?.c||'#555'}"></div></div>
+      <div class="gb-header">
+        <div>
+          <div class="gb-date">${dateStr} · ${g.venue}</div>
+          <div class="gb-matchup">
+            <span style="color:${ht?.c||'#fff'}">${g.home}</span>
+            <span class="gb-vs">VS</span>
+            <span style="color:${at?.c||'#fff'}">${g.away}</span>
+          </div>
+        </div>
+        <div class="gb-right">
+          ${totalCount ? `<div class="gb-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>${totalCount}</div>` : ''}
+          <a class="gb-more" href="gallery-detail.html?game=${g.id}" title="View all"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></a>
+        </div>
+      </div>
+      <div class="photo-strip">${stripHTML}</div>
+    </div>`;
+  }
+  wrap.innerHTML = html;
 }
 
-// ── Lightbox ─────────────────────────────────────────
-function openLightbox(idx) {
-  lbIndex = idx;
-  updateLightbox();
-  lightbox.classList.add('show');
-  document.body.style.overflow = 'hidden';
-}
-function closeLightbox() {
-  lightbox.classList.remove('show');
-  document.body.style.overflow = '';
-}
-function updateLightbox() {
-  const p = photos[lbIndex];
-  lbImg.src = p.url;
-  lbCounter.textContent = `${lbIndex + 1} / ${photos.length}`;
-}
-function lbNav(dir) {
-  lbIndex = (lbIndex + dir + photos.length) % photos.length;
-  updateLightbox();
-}
-
-document.getElementById('lbClose').addEventListener('click', closeLightbox);
-document.getElementById('lbPrev').addEventListener('click', () => lbNav(-1));
-document.getElementById('lbNext').addEventListener('click', () => lbNav(1));
-document.getElementById('lbDownload').addEventListener('click', () => downloadPhoto(photos[lbIndex]));
-lightbox.addEventListener('click', e => { if (e.target === lightbox) closeLightbox(); });
-
-// Keyboard
-document.addEventListener('keydown', e => {
-  if (!lightbox.classList.contains('show')) return;
-  if (e.key === 'Escape') closeLightbox();
-  if (e.key === 'ArrowLeft') lbNav(-1);
-  if (e.key === 'ArrowRight') lbNav(1);
+// Tab switching
+document.getElementById('tabs').addEventListener('click', e => {
+  const btn = e.target.closest('.tab');
+  if (!btn) return;
+  document.querySelectorAll('.tab').forEach(x => x.classList.remove('on'));
+  btn.classList.add('on');
+  activeTeam = btn.dataset.t;
+  renderBlocks();
 });
 
-// Touch swipe
-let touchX = 0;
-lbImg.addEventListener('touchstart', e => { touchX = e.changedTouches[0].clientX; });
-lbImg.addEventListener('touchend', e => {
-  const dx = e.changedTouches[0].clientX - touchX;
-  if (Math.abs(dx) > 50) lbNav(dx > 0 ? -1 : 1);
-});
-
-// ── Upload Events ────────────────────────────────────
-uploadZone.addEventListener('click', () => fileInput.click());
-fileInput.addEventListener('change', e => { if (e.target.files.length) uploadFiles(e.target.files); });
-uploadZone.addEventListener('dragover', e => { e.preventDefault(); uploadZone.classList.add('dragover'); });
-uploadZone.addEventListener('dragleave', () => uploadZone.classList.remove('dragover'));
-uploadZone.addEventListener('drop', e => {
-  e.preventDefault(); uploadZone.classList.remove('dragover');
-  if (e.dataTransfer.files.length) uploadFiles(e.dataTransfer.files);
-});
-
-picker.addEventListener('change', () => { if (IS_CONFIGURED) loadPhotos(); });
-
-// ── Theme sync ───────────────────────────────────────
-if (localStorage.getItem('theme') === 'light') document.documentElement.classList.add('light');
+// Theme
+const themeBtn = document.getElementById('themeBtn');
+const sunPath = 'M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8Zm0-4a1 1 0 0 0 1-1V1a1 1 0 0 0-2 0v2a1 1 0 0 0 1 1Zm0 16a1 1 0 0 0-1 1v2a1 1 0 0 0 2 0v-2a1 1 0 0 0-1-1ZM4 12a1 1 0 0 0-1-1H1a1 1 0 0 0 0 2h2a1 1 0 0 0 1-1Zm16 0a1 1 0 0 0 1 1h2a1 1 0 0 0 0-2h-2a1 1 0 0 0-1 1ZM6.34 6.34a1 1 0 0 0 0-1.41L4.93 3.52a1 1 0 0 0-1.41 1.41l1.41 1.41a1 1 0 0 0 1.41 0Zm11.32 11.32a1 1 0 0 0-1.41 1.41l1.41 1.41a1 1 0 0 0 1.41-1.41l-1.41-1.41ZM6.34 17.66a1 1 0 0 0-1.41 0l-1.41 1.41a1 1 0 0 0 1.41 1.41l1.41-1.41a1 1 0 0 0 0-1.41ZM17.66 6.34a1 1 0 0 0 1.41 0l1.41-1.41a1 1 0 0 0-1.41-1.41l-1.41 1.41a1 1 0 0 0 0 1.41Z';
+const moonPath = 'M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18Zm0 16.2V4.8a7.2 7.2 0 0 1 0 14.4Z';
+function setTheme(t) {
+  document.documentElement.setAttribute('data-theme', t);
+  localStorage.setItem('theme', t);
+  document.getElementById('themeIcon').innerHTML = `<path d="${t === 'light' ? moonPath : sunPath}"/>`;
+}
+themeBtn.addEventListener('click', () => setTheme(document.documentElement.getAttribute('data-theme') === 'light' ? 'dark' : 'light'));
+const saved = localStorage.getItem('theme') || (matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+setTheme(saved);
 
 init();
 </script>
