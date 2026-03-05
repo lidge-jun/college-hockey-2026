@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>2026 대학 아이스하키 리그</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%23111114'/%3E%3Cpath d='M18 44 L46 20' stroke='%23ccc' stroke-width='3.5' stroke-linecap='round'/%3E%3Cpath d='M44 18 L48 16 L46 20' fill='%23ccc'/%3E%3Ccircle cx='24' cy='38' r='5' fill='none' stroke='%23fff' stroke-width='2'/%3E%3C/svg%3E">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
@@ -341,7 +342,7 @@
 
     .game-row {
       display: grid;
-      grid-template-columns: 4px 1fr auto auto;
+      grid-template-columns: 4px 1fr 32px auto;
       gap: 14px;
       align-items: center;
       padding: 14px 0;
@@ -387,7 +388,7 @@
       margin-left: 6px;
     }
 
-    .g-meta { text-align: right; }
+    .g-meta { text-align: right; min-width: 110px; }
     .g-time {
       font-family: 'Barlow Condensed', sans-serif;
       font-size: 0.92rem;
