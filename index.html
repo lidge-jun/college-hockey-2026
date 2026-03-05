@@ -858,7 +858,8 @@ function pickDate(ds) {
   sel = sel === ds ? null : ds;
   renderCals();
   const panel = document.getElementById('detail');
-  if (!sel) { panel.classList.remove('show'); return; }
+  const gameList = document.getElementById('gameList');
+  if (!sel) { panel.classList.remove('show'); gameList.style.display = ''; return; }
 
   const games = gon(ds);
   let filtered = team === 'all' ? games : games.filter(g => g.home === team || g.away === team);
@@ -870,6 +871,7 @@ function pickDate(ds) {
   document.getElementById('dList').innerHTML = filtered.map(gameRowHTML).join('');
 
   panel.classList.add('show');
+  gameList.style.display = 'none';
   setTimeout(() => panel.scrollIntoView({ behavior:'smooth', block:'nearest' }), 50);
 }
 
@@ -909,6 +911,7 @@ document.getElementById('tabs').addEventListener('click', e => {
   team = t.dataset.t;
   sel = null;
   document.getElementById('detail').classList.remove('show');
+  document.getElementById('gameList').style.display = '';
   renderCals();
   updateStat();
   renderList();
