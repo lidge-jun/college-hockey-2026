@@ -342,7 +342,7 @@
 
     .game-row {
       display: grid;
-      grid-template-columns: 4px minmax(0, 1fr) auto auto;
+      grid-template-columns: 4px minmax(0, 1fr) auto 24px auto;
       gap: 14px;
       align-items: center;
       padding: 14px 0;
@@ -388,7 +388,7 @@
       margin-left: 6px;
     }
 
-    .g-meta { text-align: right; min-width: 0; display: flex; align-items: center; gap: 8px; }
+    .g-meta { text-align: right; min-width: 0; }
     .g-meta-text { text-align: right; white-space: nowrap; }
     .g-time {
       font-family: 'Barlow Condensed', sans-serif;
@@ -537,7 +537,7 @@
       .venues { grid-template-columns: 1fr 1fr; }
       .vc:nth-child(2) { border-right: none; }
       .vc { border-bottom: 1px solid var(--border); }
-      .game-row { grid-template-columns: 4px minmax(0, 1fr) auto auto; }
+      .game-row { grid-template-columns: 4px minmax(0, 1fr) auto 20px auto; }
       .g-ename { display: none; }
       .tab { padding: 10px 14px; font-size: 0.82rem; }
     }
@@ -838,8 +838,8 @@ function gameRowHTML(g) {
       </div>
     </div>
     ${scoreHTML}
+    <a href="${ve.naver}" target="_blank" class="map-link" title="네이버 지도" onclick="event.stopPropagation()"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></a>
     <div class="g-meta">
-      <a href="${ve.naver}" target="_blank" class="map-link" title="네이버 지도" onclick="event.stopPropagation()"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></a>
       <div class="g-meta-text">
         <div class="g-time">${g.time || ''}</div>
         <div class="g-venue">${ve.name}</div>
