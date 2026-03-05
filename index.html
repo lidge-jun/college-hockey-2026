@@ -263,10 +263,20 @@
       font-size: 0.68rem;
     }
 
+    .cell .dots {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+      margin-top: 2px;
+      align-items: center;
+    }
+    .cell .dot-row {
+      display: flex;
+      gap: 1px;
+    }
     .cell .dot {
       width: 4px; height: 4px;
       border-radius: 50%;
-      margin-top: 2px;
     }
 
     /* Team-specific cell coloring */
@@ -677,7 +687,11 @@ function renderCals() {
       h += `<div class="${cls}" data-d="${ds}"${style ? ` style="${style}"` : ''}>`;
       h += `<span class="n">${d}</span>`;
       if (hasG && !tc) {
-        h += `<div class="dot" style="background:${T[games[0].home].c}"></div>`;
+        h += '<div class="dots">';
+        games.forEach(g => {
+          h += `<div class="dot-row"><div class="dot" style="background:${T[g.home].c}"></div><div class="dot" style="background:${T[g.away].c}"></div></div>`;
+        });
+        h += '</div>';
       }
       h += '</div>';
     }
