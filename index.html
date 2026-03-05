@@ -582,6 +582,7 @@
     <nav class="nav">
       <a href="index.html" class="on">Schedule</a>
       <a href="standings.html">Standings</a>
+      <a href="gallery.html">Gallery</a>
     </nav>
 
     <nav class="tabs" id="tabs">
@@ -665,11 +666,11 @@
 
 <script>
 const T = {
-  '성균관대': { c:'#3DB06B', en:'KINGO LEAFS', ics:'kingo-leafs' },
-  '서울대':   { c:'#2A6BBE', en:'CAPITALS', ics:'capitals' },
-  '연세대':   { c:'#1764E8', en:'TITANS', ics:'titans' },
-  '고려대':   { c:'#9B2335', en:'TIGRIS', ics:'tigris' },
-  '광운대':   { c:'#843DA0', en:'ICE UNICORNS', ics:'ice-unicorns' },
+  '성균관대': { c:'#3DB06B', en:'KINGO LEAFS', ics:'kingo-leafs', abbr:'skku' },
+  '서울대':   { c:'#2A6BBE', en:'CAPITALS', ics:'capitals', abbr:'snu' },
+  '연세대':   { c:'#1764E8', en:'TITANS', ics:'titans', abbr:'yonsei' },
+  '고려대':   { c:'#9B2335', en:'TIGRIS', ics:'tigris', abbr:'korea' },
+  '광운대':   { c:'#843DA0', en:'ICE UNICORNS', ics:'ice-unicorns', abbr:'kwu' },
 };
 
 const V = {
@@ -796,8 +797,14 @@ function renderCals() {
   });
 }
 
+function gameId(g) {
+  const md = g.d.slice(5).replace('-','');
+  return `${md}-${T[g.home].abbr}-${T[g.away].abbr}`;
+}
+
 function gameRowHTML(g) {
   const ht = T[g.home], at = T[g.away], ve = V[g.v];
+  const gid = gameId(g);
   return `<div class="game-row" data-d="${g.d}">
     <div class="stripe" style="background:${ht.c}"></div>
     <div class="g-teams">
