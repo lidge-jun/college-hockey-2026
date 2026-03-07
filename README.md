@@ -17,7 +17,7 @@ college-hockey-2026/
 ├── results.json        # ⭐ 경기 결과 데이터 (핵심 데이터 파일)
 ├── photos.json         # ⭐ 사진 갤러리 설정 (Google Drive 폴더 매핑)
 ├── cal/                # ICS 캘린더 구독 파일 (6개)
-│   ├── all-games.ics
+│   ├── all.ics
 │   ├── tigris.ics
 │   ├── titans.ics
 │   ├── kingo-leafs.ics
@@ -196,6 +196,121 @@ Game ID: 0308-korea-skku
 2. `results.json`의 해당 경기 업데이트
 3. `git commit & push`
 4. 배포 확인
+
+---
+
+## 경기 일정 변경 방법
+
+### 개요
+경기 날짜, 시간, 장소가 변경되거나 "조율중" 등 상태 태그를 붙여야 할 때 아래 절차를 따릅니다.
+일정 데이터는 **3곳에 분산**되어 있으므로, 반드시 모두 함께 수정해야 합니다.
+
+### 수정 대상 파일 (3+α)
+
+| 파일 | 역할 |
+|------|------|
+| `index.html` (const G 배열) | 웹사이트 캘린더 + 경기 목록 표시 |
+| `results.json` | 경기 결과 데이터 (id, date 포함) |
+| `gen_ics.py` (GAMES 배열) | ICS 캘린더 파일 생성 스크립트 |
+| `cal/*.ics` | 캘린더 구독 파일 (직접 수정 또는 재생성) |
+
+### Step 1: index.html 수정
+
+`const G` 배열에서 해당 경기를 찾아 수정합니다.
+
+```javascript
+// 날짜 변경 예시
+{ d:'2026-03-13', home:'광운대', away:'서울대', v:'kwangwoon', time:'20:30–22:00' },
+// → 날짜를 3/31로 변경
+{ d:'2026-03-31', home:'광운대', away:'서울대', v:'kwangwoon', time:'20:30–22:00' },
+
+// "조율중" 태그 추가 예시
+{ d:'2026-03-08', home:'연세대', away:'광운대', v:'mokdong', time:'07:30–09:00' },
+// → note 필드 추가
+{ d:'2026-03-08', home:'연세대', away:'광운대', v:'mokdong', time:'07:30–09:00', note:'조율중' },
+```
+
+`note` 필드는 경기 카드에 작은 텍스트로 표시됩니다.
+사용 가능한 태그: `조율중`, `대관 예정`, `시간 미정` 등 자유 텍스트.
+
+### Step 2: results.json 수정
+
+날짜가 변경되면 **Game ID도 함께 변경**해야 합니다.
+홈/원정이 바뀌는 일정 조정이라면 `MMDD-homeAbbr-awayAbbr` 규칙에 맞게 ID를 다시 계산합니다.
+
+```json
+// Before
+{ "id": "0313-kwu-snu", "date": "2026-03-13", ... }
+// After
+{ "id": "0331-kwu-snu", "date": "2026-03-31", ... }
+```
+
+Game ID 규칙: `MMDD-homeAbbr-awayAbbr`
+
+### Step 3: gen_ics.py 수정
+
+`GAMES` 배열에서 해당 경기의 날짜를 변경합니다.
+
+```python
+# Before
+('2026-03-13','광운대','서울대','kwangwoon','20:30','22:00'),
+# After
+('2026-03-31','광운대','서울대','kwangwoon','20:30','22:00'),
+```
+
+### Step 4: ICS 파일 수정
+
+**⚠️ 주의**: `gen_ics.py`와 `index.html`의 일정 데이터가 일부 불일치할 수 있으므로,
+`python3 gen_ics.py`로 전체 재생성하면 다른 경기 ICS가 깨질 위험이 있습니다.
+
+**권장 방법**: 영향받는 ICS 파일만 수동 편집
+
+변경할 경기가 포함된 ICS 파일을 찾습니다:
+- `cal/all.ics` — 전체 경기 (항상 포함)
+- `cal/{팀ics}.ics` — 해당 경기의 홈/어웨이 팀 ICS
+
+예:
+- 광운대 경기 변경 → `cal/ice-unicorns.ics`
+- 서울대 경기 변경 → `cal/capitals.ics`
+
+수정할 필드 3개:
+```
+DTSTART;TZID=Asia/Seoul:20260313T203000  →  20260331T203000
+DTEND;TZID=Asia/Seoul:20260313T220000    →  20260331T220000
+UID:hockey2026-2026-03-13-kwu-snu@...   →  2026-03-31-kwu-snu@...
+```
+
+**같은 날짜에 다른 경기가 있을 수 있으므로, SUMMARY(팀명)로 대상 이벤트를 정확히 확인 후 수정합니다.**
+날짜 문자열만 일괄 치환하지 말고, 경기 조합과 시간까지 같이 확인합니다.
+
+### Step 4.5: 최종 확인
+
+수정 후 아래 항목이 서로 같은지 확인합니다:
+- `index.html` 표시 일정
+- `results.json`의 `id`, `date`
+- `gen_ics.py`의 `GAMES`
+- 관련 `cal/*.ics`의 `DTSTART`, `DTEND`, `UID`
+
+### Step 5: 커밋 & 푸시
+
+```bash
+git add index.html results.json gen_ics.py cal/
+git commit -m "schedule: 0313 광운대vs서울대 → 0331로 변경"
+git push
+```
+
+### 에이전트에게 일정 변경 요청하기
+
+```
+일정 변경:
+- 광운대(홈) vs 서울대: 3/13 → 3/31, 시간 20:30~22:00
+- 광운대 vs 연세대 경기들: "조율중" 태그 추가
+```
+
+에이전트가 자동으로:
+1. `index.html`, `results.json`, `gen_ics.py` 수정
+2. 해당 `cal/*.ics` 파일 수동 편집
+3. `git commit & push`
 
 ---
 
