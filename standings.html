@@ -4,6 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>2026 College Hockey — Standings</title>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
@@ -474,18 +476,30 @@ document.getElementById('secTabs').addEventListener('click', e => {
   document.getElementById('p' + btn.dataset.p.charAt(0).toUpperCase() + btn.dataset.p.slice(1)).classList.add('show');
 });
 
-// Load results and render
+// Firebase init
+firebase.initializeApp({
+  apiKey:"AIzaSyAkO1r-ifVEkM4itGMLr5gqYOB_kN9iUHI",
+  authDomain:"tigris-clubfair.firebaseapp.com",
+  databaseURL:"https://tigris-clubfair-default-rtdb.firebaseio.com",
+  projectId:"tigris-clubfair",
+  storageBucket:"tigris-clubfair.firebasestorage.app",
+  messagingSenderId:"294097458178",
+  appId:"1:294097458178:web:1e26902006b267a06bc31b"
+});
+const hockeyRef = firebase.database().ref('hockey/results');
+
+// Load results and render (real-time)
 async function init() {
   try {
-    const res = await fetch('results.json');
-    const data = await res.json();
+    const snap = await hockeyRef.once('value');
+    const data = snap.val() || { games: [] };
+    if (!Array.isArray(data.games)) data.games = data.games ? Object.values(data.games) : [];
     const { teams, players } = aggregateResults(data.games);
     renderTeam(teams);
     renderPoints(players);
     renderPlayers(players, 'tGoals', 'g');
     renderPlayers(players, 'tAssists', 'a');
   } catch (e) {
-    // Fallback: render empty standings
     const teams = Object.entries(TEAM_META).map(([name, m]) =>
       ({ name, en:m.en, c:m.c, gp:0, w:0, l:0, otl:0, gf:0, ga:0 }));
     renderTeam(teams);
@@ -494,7 +508,17 @@ async function init() {
     renderPlayers([], 'tAssists', 'a');
   }
 }
-init();
+
+// Also listen for real-time updates
+hockeyRef.on('value', async snap => {
+  const data = snap.val() || { games: [] };
+  if (!Array.isArray(data.games)) data.games = data.games ? Object.values(data.games) : [];
+  const { teams, players } = aggregateResults(data.games);
+  renderTeam(teams);
+  renderPoints(players);
+  renderPlayers(players, 'tGoals', 'g');
+  renderPlayers(players, 'tAssists', 'a');
+});
 
 // Theme
 const themeBtn = document.getElementById('themeBtn');

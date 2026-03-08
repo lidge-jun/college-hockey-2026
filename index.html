@@ -4,6 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>2026 대학 아이스하키 리그</title>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%23111114'/%3E%3Cpath d='M18 44 L46 20' stroke='%23ccc' stroke-width='3.5' stroke-linecap='round'/%3E%3Cpath d='M44 18 L48 16 L46 20' fill='%23ccc'/%3E%3Ccircle cx='24' cy='38' r='5' fill='none' stroke='%23fff' stroke-width='2'/%3E%3C/svg%3E">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -909,10 +911,26 @@ document.getElementById('tabs').addEventListener('click', e => {
   renderList();
 });
 
-// Load results then render
-fetch('results.json').then(r => r.json()).then(data => {
-  for (const g of data.games) { if (g.status === 'final') RESULTS[g.id] = g; }
-}).catch(() => {}).finally(() => {
+// Firebase init
+firebase.initializeApp({
+  apiKey:"AIzaSyAkO1r-ifVEkM4itGMLr5gqYOB_kN9iUHI",
+  authDomain:"tigris-clubfair.firebaseapp.com",
+  databaseURL:"https://tigris-clubfair-default-rtdb.firebaseio.com",
+  projectId:"tigris-clubfair",
+  storageBucket:"tigris-clubfair.firebasestorage.app",
+  messagingSenderId:"294097458178",
+  appId:"1:294097458178:web:1e26902006b267a06bc31b"
+});
+const hockeyRef = firebase.database().ref('hockey/results');
+
+// Load results (real-time)
+hockeyRef.on('value', snap => {
+  const data = snap.val();
+  RESULTS = {};
+  if (data && data.games) {
+    const games = Array.isArray(data.games) ? data.games : Object.values(data.games);
+    for (const g of games) { if (g.status === 'final') RESULTS[g.id] = g; }
+  }
   renderCals();
   updateStat();
   renderList();

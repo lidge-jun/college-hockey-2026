@@ -4,6 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>2026 College Hockey — Gallery</title>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700;800&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
@@ -198,14 +200,28 @@ async function fetchDriveFiles(folderId, apiKey) {
 function thumbUrl(fileId) { return `https://drive.google.com/thumbnail?id=${fileId}&sz=w400`; }
 
 async function init() {
-  const [photosRes, resultsRes] = await Promise.all([
-    fetch('photos.json').then(r => r.json()).catch(() => ({ apiKey: '', games: {} })),
-    fetch('results.json').then(r => r.json()).catch(() => ({ games: [] }))
+  // Firebase init
+  firebase.initializeApp({
+    apiKey:"AIzaSyAkO1r-ifVEkM4itGMLr5gqYOB_kN9iUHI",
+    authDomain:"tigris-clubfair.firebaseapp.com",
+    databaseURL:"https://tigris-clubfair-default-rtdb.firebaseio.com",
+    projectId:"tigris-clubfair",
+    storageBucket:"tigris-clubfair.firebasestorage.app",
+    messagingSenderId:"294097458178",
+    appId:"1:294097458178:web:1e26902006b267a06bc31b"
+  });
+  const db = firebase.database();
+  const [photosSnap, resultsSnap] = await Promise.all([
+    db.ref('hockey/photos').once('value'),
+    db.ref('hockey/results').once('value')
   ]);
+  const photosRes = photosSnap.val() || { apiKey: '', games: {} };
+  const resultsRes = resultsSnap.val() || { games: [] };
+  if (!Array.isArray(resultsRes.games)) resultsRes.games = resultsRes.games ? Object.values(resultsRes.games) : [];
 
   photoConfig = { apiKey: photosRes.apiKey, games: normalizePhotos(photosRes.games) };
 
-  // Build game list from results.json
+  // Build game list from results
   gameList = resultsRes.games.map(g => {
     const parts = g.id.split('-');
     const homeAbbr = parts[1], awayAbbr = parts[2];
