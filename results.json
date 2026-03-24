@@ -6,9 +6,11 @@
       "home": "고려대",
       "away": "성균관대",
       "venue": "고대링크",
-      "status": "scheduled",
-      "score": null,
+      "status": "final",
+      "score": { "home": 3, "away": 3 },
       "overtime": false,
+      "shootout": { "winner": "away" },
+      "disputed": true,
       "periods": null,
       "players": null
     },
@@ -21,6 +23,7 @@
       "status": "scheduled",
       "score": null,
       "overtime": false,
+      "shootout": null,
       "periods": null,
       "players": null
     },
@@ -30,9 +33,10 @@
       "home": "서울대",
       "away": "광운대",
       "venue": "목동",
-      "status": "scheduled",
-      "score": null,
+      "status": "final",
+      "score": { "home": 8, "away": 1 },
       "overtime": false,
+      "shootout": { "winner": "home" },
       "periods": null,
       "players": null
     },
@@ -45,6 +49,7 @@
       "status": "scheduled",
       "score": null,
       "overtime": false,
+      "shootout": null,
       "periods": null,
       "players": null
     },
@@ -54,9 +59,10 @@
       "home": "연세대",
       "away": "서울대",
       "venue": "목동",
-      "status": "scheduled",
-      "score": null,
+      "status": "final",
+      "score": { "home": 3, "away": 3 },
       "overtime": false,
+      "shootout": { "winner": "home" },
       "periods": null,
       "players": null
     },
@@ -66,9 +72,10 @@
       "home": "성균관대",
       "away": "연세대",
       "venue": "수원",
-      "status": "scheduled",
-      "score": null,
+      "status": "final",
+      "score": { "home": 5, "away": 3 },
       "overtime": false,
+      "shootout": { "winner": "draw" },
       "periods": null,
       "players": null
     },
@@ -78,9 +85,10 @@
       "home": "고려대",
       "away": "서울대",
       "venue": "고대링크",
-      "status": "scheduled",
-      "score": null,
+      "status": "final",
+      "score": { "home": 1, "away": 5 },
       "overtime": false,
+      "shootout": { "winner": "draw" },
       "periods": null,
       "players": null
     },
@@ -90,9 +98,10 @@
       "home": "서울대",
       "away": "성균관대",
       "venue": "목동",
-      "status": "scheduled",
-      "score": null,
+      "status": "final",
+      "score": { "home": 3, "away": 4 },
       "overtime": false,
+      "shootout": { "winner": "draw" },
       "periods": null,
       "players": null
     },
@@ -102,9 +111,10 @@
       "home": "고려대",
       "away": "연세대",
       "venue": "고대링크",
-      "status": "scheduled",
-      "score": null,
+      "status": "final",
+      "score": { "home": 8, "away": 0 },
       "overtime": false,
+      "shootout": { "winner": "away" },
       "periods": null,
       "players": null
     },
@@ -117,6 +127,7 @@
       "status": "scheduled",
       "score": null,
       "overtime": false,
+      "shootout": null,
       "periods": null,
       "players": null
     },
@@ -129,6 +140,7 @@
       "status": "scheduled",
       "score": null,
       "overtime": false,
+      "shootout": null,
       "periods": null,
       "players": null
     },
@@ -141,6 +153,7 @@
       "status": "scheduled",
       "score": null,
       "overtime": false,
+      "shootout": null,
       "periods": null,
       "players": null
     },
@@ -153,6 +166,7 @@
       "status": "scheduled",
       "score": null,
       "overtime": false,
+      "shootout": null,
       "periods": null,
       "players": null
     },
@@ -165,6 +179,7 @@
       "status": "scheduled",
       "score": null,
       "overtime": false,
+      "shootout": null,
       "periods": null,
       "players": null
     },
@@ -177,6 +192,7 @@
       "status": "scheduled",
       "score": null,
       "overtime": false,
+      "shootout": null,
       "periods": null,
       "players": null
     },
@@ -189,6 +205,7 @@
       "status": "scheduled",
       "score": null,
       "overtime": false,
+      "shootout": null,
       "periods": null,
       "players": null
     },
@@ -201,6 +218,7 @@
       "status": "scheduled",
       "score": null,
       "overtime": false,
+      "shootout": null,
       "periods": null,
       "players": null
     },
@@ -213,6 +231,7 @@
       "status": "scheduled",
       "score": null,
       "overtime": false,
+      "shootout": null,
       "periods": null,
       "players": null
     },
@@ -225,6 +244,7 @@
       "status": "scheduled",
       "score": null,
       "overtime": false,
+      "shootout": null,
       "periods": null,
       "players": null
     },
@@ -237,6 +257,7 @@
       "status": "scheduled",
       "score": null,
       "overtime": false,
+      "shootout": null,
       "periods": null,
       "players": null
     }

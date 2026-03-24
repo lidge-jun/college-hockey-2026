@@ -551,6 +551,49 @@
       .vc { border-right: none; }
       .tab { padding: 10px 12px; font-size: 0.78rem; }
     }
+    /* ── Result display ── */
+    .g-result {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 2px;
+    }
+    .g-so {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.62rem;
+      font-weight: 500;
+      color: var(--text3);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .g-disputed {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.58rem;
+      font-weight: 700;
+      color: #e53935;
+      letter-spacing: 1px;
+    }
+
+    /* ── Past games toggle ── */
+    .past-toggle {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.82rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--text2);
+      background: none;
+      border: none;
+      padding: 14px 0;
+      cursor: pointer;
+      width: 100%;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+      transition: color 0.15s;
+    }
+    .past-toggle:hover { color: var(--text); }
+    .past-games { border-bottom: 1px solid var(--border); }
+
     @media (hover: none) {
       .cell.game:hover { background: transparent; }
       .cell.game:active { background: var(--surface2); }
@@ -616,6 +659,9 @@
       </div>
       <div class="detail-matches" id="dList"></div>
     </div>
+
+    <button class="past-toggle" id="pastToggle" onclick="togglePast()" style="display:none">▸ 지난 경기 결과</button>
+    <div class="past-games" id="pastGames" style="display:none"></div>
 
     <div class="game-list" id="gameList"></div>
 
@@ -692,15 +738,15 @@ const V = {
 };
 
 const G = [
-  { d:'2026-03-08', home:'고려대',   away:'성균관대', v:'korea',     time:'22:30–24:00' },
+  { d:'2026-03-08', home:'고려대',   away:'성균관대', v:'korea',     time:'22:30–24:00', score:[3,3], so:'away', disputed:true },
   { d:'2026-03-08', home:'연세대',   away:'광운대',   v:'mokdong',   time:'07:30–09:00', note:'조율중' },
-  { d:'2026-03-13', home:'서울대',   away:'광운대',   v:'mokdong',   time:'23:00–01:00' },
+  { d:'2026-03-13', home:'서울대',   away:'광운대',   v:'mokdong',   time:'23:00–01:00', score:[8,1], so:'home' },
   { d:'2026-03-31', home:'광운대',   away:'서울대',   v:'kwangwoon', time:'20:30–22:00' },
-  { d:'2026-03-14', home:'연세대',   away:'서울대',   v:'mokdong',   time:'00:30–02:00' },
-  { d:'2026-03-15', home:'성균관대', away:'연세대',   v:'suwon',     time:'22:00–23:30' },
-  { d:'2026-03-15', home:'고려대',   away:'서울대',   v:'korea',     time:'22:30–24:00' },
-  { d:'2026-03-20', home:'서울대',   away:'성균관대', v:'mokdong',   time:'23:00–01:00' },
-  { d:'2026-03-22', home:'고려대',   away:'연세대',   v:'korea',     time:'22:30–24:00' },
+  { d:'2026-03-14', home:'연세대',   away:'서울대',   v:'mokdong',   time:'00:30–02:00', score:[3,3], so:'home' },
+  { d:'2026-03-15', home:'성균관대', away:'연세대',   v:'suwon',     time:'22:00–23:30', score:[5,3], so:'draw' },
+  { d:'2026-03-15', home:'고려대',   away:'서울대',   v:'korea',     time:'22:30–24:00', score:[1,5], so:'draw' },
+  { d:'2026-03-20', home:'서울대',   away:'성균관대', v:'mokdong',   time:'23:00–01:00', score:[3,4], so:'draw' },
+  { d:'2026-03-22', home:'고려대',   away:'연세대',   v:'korea',     time:'22:30–24:00', score:[8,0], so:'away' },
   { d:'2026-03-28', home:'광운대',   away:'연세대',   v:'kwangwoon', time:'17:30–19:00', note:'조율중' },
   { d:'2026-03-29', home:'성균관대', away:'광운대',   v:'suwon',     time:'22:00–23:30' },
   { d:'2026-04-17', home:'서울대',   away:'연세대',   v:'mokdong',   time:'23:00–01:00' },
@@ -819,15 +865,26 @@ function gameRowHTML(g) {
   const ht = T[g.home], at = T[g.away], ve = V[g.v];
   const gid = gameId(g);
   const r = RESULTS[gid];
-  const hasScore = r && r.status === 'final' && r.score;
-  const scoreHTML = hasScore
-    ? `<div class="g-score">
-        <span class="g-score-num">${r.score.home}</span>
+  const hasScore = g.score || (r && r.status === 'final' && r.score);
+  let scoreHTML = '';
+  if (hasScore) {
+    const sc = g.score || [r.score.home, r.score.away];
+    const soField = g.so || (r && r.shootout ? r.shootout.winner : null);
+    scoreHTML = `<div class="g-result"><div class="g-score">
+        <span class="g-score-num">${sc[0]}</span>
         <span class="g-score-dash">–</span>
-        <span class="g-score-num">${r.score.away}</span>
-        <span class="g-score-label">${r.overtime ? '<span class="g-score-ot">OT</span>' : 'FINAL'}</span>
-      </div>`
-    : '';
+        <span class="g-score-num">${sc[1]}</span>
+        <span class="g-score-label">FINAL</span>
+      </div>`;
+    if (soField) {
+      const soText = soField === 'draw' ? 'SO 무승부' : `SO ${soField === 'home' ? g.home : g.away} 승`;
+      scoreHTML += `<div class="g-so">${soText}</div>`;
+    }
+    if (g.disputed) {
+      scoreHTML += `<div class="g-disputed">협의중</div>`;
+    }
+    scoreHTML += '</div>';
+  }
   return `<div class="game-row" data-d="${g.d}">
     <div class="stripe" style="background:${ht.c}"></div>
     <div class="g-teams">
@@ -870,14 +927,65 @@ function pickDate(ds) {
   setTimeout(() => panel.scrollIntoView({ behavior:'smooth', block:'nearest' }), 50);
 }
 
+let showPast = false;
+
+function renderPast() {
+  const wrap = document.getElementById('pastGames');
+  let list = [...G].sort((a,b) => a.d.localeCompare(b.d));
+  if (team !== 'all') list = list.filter(g => g.home === team || g.away === team);
+  const past = list.filter(g => g.score);
+
+  let h = '';
+  let lastDate = '';
+  past.forEach(g => {
+    if (g.d !== lastDate) {
+      const dt = new Date(g.d + 'T12:00:00');
+      const mo = MO.find(m => m.m === dt.getMonth()+1);
+      h += `<div class="date-head" id="past-${g.d}">${DOW_EN[dt.getDay()]} · ${mo?.label||''} ${dt.getDate()}</div>`;
+      lastDate = g.d;
+    }
+    h += gameRowHTML(g);
+  });
+  wrap.innerHTML = h;
+  wrap.querySelectorAll('.game-row').forEach(r => {
+    r.addEventListener('click', () => pickDate(r.dataset.d));
+  });
+}
+
+function togglePast() {
+  showPast = !showPast;
+  const btn = document.getElementById('pastToggle');
+  const wrap = document.getElementById('pastGames');
+  if (showPast) {
+    wrap.style.display = '';
+    renderPast();
+    btn.textContent = '▾ 지난 경기 결과 닫기';
+    setTimeout(() => wrap.scrollIntoView({ behavior:'smooth', block:'start' }), 50);
+  } else {
+    wrap.style.display = 'none';
+    renderList();
+  }
+}
+
 function renderList() {
   const wrap = document.getElementById('gameList');
   const now = new Date(); now.setHours(0,0,0,0);
   let list = [...G].sort((a,b) => a.d.localeCompare(b.d));
   if (team !== 'all') list = list.filter(g => g.home === team || g.away === team);
 
+  // past toggle button
+  const past = list.filter(g => g.score);
+  const pastBtn = document.getElementById('pastToggle');
+  if (past.length) {
+    pastBtn.style.display = '';
+    pastBtn.textContent = showPast ? '▾ 지난 경기 결과 닫기' : `▸ 지난 경기 결과 (${past.length})`;
+  } else {
+    pastBtn.style.display = 'none';
+  }
+  if (showPast) renderPast();
+
   // upcoming only
-  const upcoming = list.filter(g => new Date(g.d+'T12:00:00') >= now);
+  const upcoming = list.filter(g => !g.score && new Date(g.d+'T12:00:00') >= now);
   const show = upcoming.length ? upcoming : list.slice(-10);
 
   let h = '';
@@ -905,7 +1013,9 @@ document.getElementById('tabs').addEventListener('click', e => {
   t.classList.add('on');
   team = t.dataset.t;
   sel = null;
+  showPast = false;
   document.getElementById('detail').classList.remove('show');
+  document.getElementById('pastGames').style.display = 'none';
   renderCals();
   updateStat();
   renderList();

@@ -286,9 +286,12 @@
             <th>#</th>
             <th>Team</th>
             <th>GP</th>
-            <th>W</th>
-            <th>L</th>
-            <th>OTL</th>
+            <th>MW</th>
+            <th>MD</th>
+            <th>ML</th>
+            <th>SOW</th>
+            <th>SOD</th>
+            <th>SOL</th>
             <th>PTS</th>
             <th>GF</th>
             <th>GA</th>
@@ -362,15 +365,31 @@ const TEAM_META = {
 };
 
 function teamColor(name) { return TEAM_META[name]?.c || '#555'; }
-function pts(t) { return t.w * 3 + t.otl; }
+function pts(t) { return t.mw * 2 + t.md * 1 + t.sow * 1 + t.sod * 0.5; }
+
+// Static results fallback (embedded from G data)
+const STATIC_RESULTS = [
+  { id:'0308-korea-skku', home:'고려대', away:'성균관대', status:'final', score:{home:3,away:3}, shootout:{winner:'away'}, disputed:true },
+  { id:'0313-snu-kwu', home:'서울대', away:'광운대', status:'final', score:{home:8,away:1}, shootout:{winner:'home'} },
+  { id:'0314-yonsei-snu', home:'연세대', away:'서울대', status:'final', score:{home:3,away:3}, shootout:{winner:'home'} },
+  { id:'0315-skku-yonsei', home:'성균관대', away:'연세대', status:'final', score:{home:5,away:3}, shootout:{winner:'draw'} },
+  { id:'0315-korea-snu', home:'고려대', away:'서울대', status:'final', score:{home:1,away:5}, shootout:{winner:'draw'} },
+  { id:'0320-snu-skku', home:'서울대', away:'성균관대', status:'final', score:{home:3,away:4}, shootout:{winner:'draw'} },
+  { id:'0322-korea-yonsei', home:'고려대', away:'연세대', status:'final', score:{home:8,away:0}, shootout:{winner:'away'} },
+];
 
 function aggregateResults(games) {
-  const finals = games.filter(g => g.status === 'final');
+  // Merge static + firebase (firebase overrides by id)
+  const byId = {};
+  for (const g of STATIC_RESULTS) byId[g.id] = g;
+  for (const g of games) if (g.status === 'final') byId[g.id] = g;
+  const finals = Object.values(byId).filter(g => g.status === 'final');
+
   // Team standings
   const teams = {};
   for (const name of Object.keys(TEAM_META)) {
     const m = TEAM_META[name];
-    teams[name] = { name, en: m.en, c: m.c, gp:0, w:0, l:0, otl:0, gf:0, ga:0 };
+    teams[name] = { name, en: m.en, c: m.c, gp:0, mw:0, md:0, ml:0, sow:0, sod:0, sol:0, gf:0, ga:0 };
   }
   for (const g of finals) {
     if (!g.score) continue;
@@ -379,12 +398,16 @@ function aggregateResults(games) {
     h.gp++; a.gp++;
     h.gf += g.score.home; h.ga += g.score.away;
     a.gf += g.score.away; a.ga += g.score.home;
-    if (g.score.home > g.score.away) {
-      h.w++;
-      if (g.overtime) { a.otl++; } else { a.l++; }
-    } else {
-      a.w++;
-      if (g.overtime) { h.otl++; } else { h.l++; }
+    // Main match
+    if (g.score.home > g.score.away) { h.mw++; a.ml++; }
+    else if (g.score.home < g.score.away) { a.mw++; h.ml++; }
+    else { h.md++; a.md++; }
+    // Shootout (independent)
+    if (g.shootout) {
+      const sw = g.shootout.winner;
+      if (sw === 'home') { h.sow++; a.sol++; }
+      else if (sw === 'away') { a.sow++; h.sol++; }
+      else if (sw === 'draw') { h.sod++; a.sod++; }
     }
   }
   // Player stats — aggregate across all games
@@ -422,11 +445,14 @@ function renderTeam(teamList) {
     }
     const diff = t.gf - t.ga;
     const diffStr = diff > 0 ? `+${diff}` : String(diff);
+    const p = pts(t);
+    const pStr = p % 1 === 0 ? String(p) : p.toFixed(1);
     return `<tr>
       <td>${rank}</td>
       <td><div class="t-team"><div class="t-stripe" style="background:${t.c}"></div><div class="t-info"><div class="t-name">${t.name}</div><div class="t-en">${t.en}</div></div></div></td>
-      <td>${t.gp}</td><td>${t.w}</td><td>${t.l}</td><td>${t.otl}</td>
-      <td class="pts-cell">${pts(t)}</td>
+      <td>${t.gp}</td><td>${t.mw}</td><td>${t.md}</td><td>${t.ml}</td>
+      <td>${t.sow}</td><td>${t.sod}</td><td>${t.sol}</td>
+      <td class="pts-cell">${pStr}</td>
       <td>${t.gf}</td><td>${t.ga}</td><td>${diffStr}</td>
     </tr>`;
   }).join('');
@@ -500,12 +526,12 @@ async function init() {
     renderPlayers(players, 'tGoals', 'g');
     renderPlayers(players, 'tAssists', 'a');
   } catch (e) {
-    const teams = Object.entries(TEAM_META).map(([name, m]) =>
-      ({ name, en:m.en, c:m.c, gp:0, w:0, l:0, otl:0, gf:0, ga:0 }));
+    // Still compute from static results on Firebase failure
+    const { teams, players } = aggregateResults([]);
     renderTeam(teams);
-    renderPoints([]);
-    renderPlayers([], 'tGoals', 'g');
-    renderPlayers([], 'tAssists', 'a');
+    renderPoints(players);
+    renderPlayers(players, 'tGoals', 'g');
+    renderPlayers(players, 'tAssists', 'a');
   }
 }
 

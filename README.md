@@ -410,14 +410,88 @@ Google Drive 폴더 링크: https://drive.google.com/drive/folders/1AbCdEfGhIjKl
 
 ---
 
+## Game Results (Season 2026)
+
+### Completed Games (7)
+
+| Date | Home | Score | Away | Shootout | Notes |
+|------|------|-------|------|----------|-------|
+| 03/08 | 고려대 | 3–3 | 성균관대 | SO 성대승 | 협의중 (disputed) |
+| 03/08 | 서울대 | 8–1 | 광운대 | SO 서울대승 | |
+| 03/15 | 연세대 | 3–3 | 서울대 | SO 연대승 | |
+| 03/22 | 성균관대 | 5–3 | 연세대 | SO 무승부 | |
+| 03/22 | 고려대 | 1–5 | 서울대 | SO 무승부 | |
+| 03/29 | 서울대 | 3–4 | 성균관대 | SO 무승부 | |
+| 03/29 | 고려대 | 8–0 | 연세대 | SO 연대승 | |
+
+### Schedule Changes
+
+- 서울대 vs 연세대: 04-03 → **04-17**
+- 서울대 vs 고려대: 04-10 → **04-24**
+
+---
+
+## Dual Scoring System
+
+This league uses a unique two-component scoring system where the main match result and the shootout (SO) are tracked and scored **independently**.
+
+### Points Formula
+
+| Event | Win | Draw | Loss |
+|-------|-----|------|------|
+| Main match | 2 pts | 1 pt | 0 pt |
+| Shootout (SO) | 1 pt | 0.5 pt | 0 pt |
+
+**Total points = main match points + shootout points**
+
+A game that ends in regulation as a draw always has a shootout. A regulation win also has a shootout (independent of the main result).
+
+### Standings Columns
+
+`standings.html` now tracks separate columns for main results and shootout results:
+
+| Column | Meaning |
+|--------|---------|
+| MW / MD / ML | Main match wins / draws / losses |
+| SOW / SOD / SOL | Shootout wins / draws / losses |
+| PTS | `MW×2 + MD×1 + SOW×1 + SOD×0.5` |
+
+### Head-to-Head Tiebreaker
+
+When teams are tied on points, the main match result takes priority; shootout result is the secondary tiebreaker.
+
+### results.json Schema — Shootout Field
+
+```json
+{
+  "id": "0308-korea-skku",
+  "status": "final",
+  "score": { "home": 3, "away": 3 },
+  "shootout": {
+    "winner": "skku"
+  }
+}
+```
+
+`shootout.winner` values: team abbreviation string (e.g. `"korea"`, `"skku"`, `"snu"`, `"yonsei"`, `"kwu"`), or `null` for a shootout draw.
+
+### UI Features (index.html)
+
+- Past games are collapsed by default; toggle with the **▸/▾** button above the game list.
+- Completed game cards show the score with a shootout result badge (`SO 승` / `SO 무승부`).
+- Games under review show a red **협의중** (disputed) tag.
+
+---
+
 ## 순위 계산 규칙
 
 | 항목 | 규칙 |
 |------|------|
-| 승점 | W=3, OTL=1, L=0 |
-| 팀 순위 | 승점 → 골득실(GF-GA) → 득점(GF) |
+| 본경기 승점 | W=2, D=1, L=0 |
+| 슈팅아웃(SO) 승점 | W=1, D=0.5, L=0 |
+| 총 승점 | 본경기 + SO 합산 |
+| 팀 순위 | 승점 → 본경기 결과 우선 → 골득실(GF-GA) → 득점(GF) |
 | 개인 포인트 | G + A |
-| 연장전(OT) | 진 팀은 OTL (1점), 이긴 팀은 W (3점) |
 
 ---
 
