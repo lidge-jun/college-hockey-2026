@@ -10,7 +10,6 @@
       "score": { "home": 3, "away": 3 },
       "overtime": false,
       "shootout": { "winner": "away" },
-      "disputed": true,
       "periods": null,
       "players": null
     },
